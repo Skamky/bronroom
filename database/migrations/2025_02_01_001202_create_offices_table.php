@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('offices', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('timezone');
+            $table->string('timezone')->comment('IANA timezone format');
             $table->string('location')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();

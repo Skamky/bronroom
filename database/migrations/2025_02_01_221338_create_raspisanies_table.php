@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('event_id')->constrained('events');
             $table->foreignId('room_id')->constrained('rooms');
-            $table->timestampTz('start_date');
-            $table->timestampTz('end_date');
+            $table->timestampTz('start_date')->comment('Дата начала события в формате ISO 8601 (UTC)');
+            $table->timestampTz('end_date')->comment('Дата конца события в формате ISO 8601 (UTC)');
             $table->timestamps();
 
         });

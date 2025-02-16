@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use Database\Factories\RaspisanieFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
@@ -14,25 +18,26 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $room_id
  * @property string $start_date
  * @property string $end_date
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\TFactory|null $use_factory
- * @method static \Database\Factories\RaspisanieFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Raspisanie newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Raspisanie newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Raspisanie query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Raspisanie whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Raspisanie whereEndDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Raspisanie whereEventId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Raspisanie whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Raspisanie whereRoomId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Raspisanie whereStartDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Raspisanie whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Raspisanie whereUserId($value)
- * @mixin \Eloquent
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
+ * @property-read TFactory|null $use_factory
+ * @method static RaspisanieFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Raspisanie newModelQuery()
+ * @method static Builder<static>|Raspisanie newQuery()
+ * @method static Builder<static>|Raspisanie query()
+ * @method static Builder<static>|Raspisanie whereCreatedAt($value)
+ * @method static Builder<static>|Raspisanie whereEndDate($value)
+ * @method static Builder<static>|Raspisanie whereEventId($value)
+ * @method static Builder<static>|Raspisanie whereId($value)
+ * @method static Builder<static>|Raspisanie whereRoomId($value)
+ * @method static Builder<static>|Raspisanie whereStartDate($value)
+ * @method static Builder<static>|Raspisanie whereUpdatedAt($value)
+ * @method static Builder<static>|Raspisanie whereUserId($value)
+ * @mixin Eloquent
  */
 class Raspisanie extends Model
 {
-    /** @use HasFactory<\Database\Factories\RaspisanieFactory> */
+    /** @use HasFactory<RaspisanieFactory> */
     use HasFactory;
 }

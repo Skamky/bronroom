@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
@@ -25,11 +24,7 @@ class RoleSeeder extends Seeder
                 'label' => 'Администратор',
             ],
         ];
-    //    Role::query()->truncate();
-        Role::query()->upsert($roles,            ['code']);
+        Role::query()->upsert($roles, ['code']);
 
-//        foreach ($roles as $role) {
-//            Role::query()->updateOrCreate(['code' => $role['code']], $role);
-//        }
     }
 }
