@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoomController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,13 +18,25 @@ Route::get('/welcome_laravel', function () {
 
 Route::get('/phpinfo', function () {return phpinfo();});
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
 
-Route::get('/', function () {
-    return Inertia::render('Index');
-})->name('index');
+    Route::redirect('/', 'offices');
+
+    Route::resource('offices', OfficeController::class);
+
+    Route::prefix('offices/{office_id}')->group(function () {
+        Route::apiResource('rooms', RoomController::class);
+    });
+
+
+});
+
+
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

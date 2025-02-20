@@ -4,16 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreRoomRequest;
 use App\Http\Requests\UpdateRoomRequest;
+use App\Models\Office;
 use App\Models\Room;
+use Illuminate\Http\JsonResponse;
 
 class RoomController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @param string $office_id $
+     * @return JsonResponse
      */
-    public function index()
+    public function index(string $office_id)
     {
-        //
+        $rooms = Office::query()->findOrFail($office_id)->rooms;
+        return response()->json($rooms);
     }
 
     /**

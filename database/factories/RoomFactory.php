@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class RoomFactory extends Factory
 {
-
     /**
      * Define the model's default state.
      *
@@ -19,10 +18,12 @@ class RoomFactory extends Factory
      */
     public function definition()
     {
+        $office = Office::query()->inRandomOrder()->first();
         return [
-            'name' => $this->faker->word,
+            'name' => $office->name.' '.$this->faker->word,
             'description' => $this->faker->sentence,
-            'office_id' =>  Office::query()->inRandomOrder()->first()->id,
+            'capacity' => $this->faker->numberBetween(1, 10),
+            'office_id' => $office->id ,
         ];
     }
 

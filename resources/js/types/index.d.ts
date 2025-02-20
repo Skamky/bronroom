@@ -12,3 +12,12 @@ export type PageProps<
         user: User;
     };
 };
+
+
+export interface DashboardPageProps extends PageProps{
+    url: string;
+    href: (path?: string) => string;
+    offices: { id: string; name: string; timezone:string; location: string|null; description: string|null }[];
+    selectedOfficeId: string;
+    data: { data: string };
+}
