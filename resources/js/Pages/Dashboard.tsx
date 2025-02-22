@@ -1,30 +1,19 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import Calendar from "@/Components/Calendar/Calndar";
+import Navbar from "react-bootstrap/Navbar";
+import Container from "react-bootstrap/Container";
+import React from "react";
 
 export default function Dashboard() {
     return (
-        <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Dashboard
-                </h2>
-            }
-        >
-            <Head title="Dashboard" />
-
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
-                            You're logged in!
-                            Вы вошли
-
-                            <Calendar></Calendar>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </AuthenticatedLayout>
+        <Navbar className="bg-body-tertiary">
+            <Container>
+                <Navbar.Brand href="#home">Navbar with text</Navbar.Brand>
+                <Navbar.Toggle/>
+                <Navbar.Collapse className="justify-content-end">
+                    <Navbar.Text>
+                        Signed in as: <a href="#login">Mark Otto</a>
+                    </Navbar.Text>
+                </Navbar.Collapse>
+            </Container>
+        </Navbar>
     );
 }

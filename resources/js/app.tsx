@@ -1,12 +1,13 @@
 import '../css/app.css';
 import './bootstrap';
 
-import { createInertiaApp } from '@inertiajs/react';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { createRoot } from 'react-dom/client';
+import {createInertiaApp} from '@inertiajs/react';
+import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
+import {createRoot} from 'react-dom/client';
 import '@gravity-ui/uikit/styles/fonts.css';
 import '@gravity-ui/uikit/styles/styles.css';
-import { ThemeProvider } from '@gravity-ui/uikit';
+import {ThemeProvider} from '@gravity-ui/uikit';
+
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
@@ -26,6 +27,6 @@ createInertiaApp({
         );
     },
     progress: {
-        color: '#4B5563',
+        color: '#b76133',
     },
 });

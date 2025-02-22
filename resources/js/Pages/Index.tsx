@@ -1,10 +1,14 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import {Head, usePage} from '@inertiajs/react';
+import {usePage} from '@inertiajs/react';
 import TableRooms from "@/Components/TableRooms";
-import {Select} from '@gravity-ui/uikit';
+import {Card, Select} from '@gravity-ui/uikit';
 import {DashboardPageProps} from '@/types';
 import React, {useEffect, useState} from "react";
 import Calendar from "@/Components/Calendar/Calndar";
+
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 export default function Dashboard({offices, selectedOfficeId, data}: DashboardPageProps) {
     //  const evtSource = new EventSource('/stream')
@@ -32,20 +36,32 @@ export default function Dashboard({offices, selectedOfficeId, data}: DashboardPa
                 </h2>
             }
         >
-            <Head title="Index"/>
 
-            <Select
-                options={offices.map(item => ({value: item.id, content: item.name}))}
-                value={currentSelectedOfficeId ? [currentSelectedOfficeId] : []}
-                onUpdate={handleCityChange}
-                placeholder={'Выберите Офис'}
-            />
+            <Container>
+                <Row>
 
 
-            <TableRooms officeId={Number(currentSelectedOfficeId)}/>
-            <Calendar></Calendar>
+                    <Col>
+                        <Card>
+                            <Select
+                                options={offices.map(item => ({value: item.id, content: item.name}))}
+                                value={currentSelectedOfficeId ? [currentSelectedOfficeId] : []}
+                                onUpdate={handleCityChange}
+                                placeholder={'Выберите Офис'}
+                            />
 
 
+                            <TableRooms officeId={Number(currentSelectedOfficeId)}/>
+                        </Card>
+                    </Col>
+                    <Col>
+                        <Card>
+                            <Calendar></Calendar>
+                        </Card>
+                    </Col>
+                </Row>
+
+            </Container>
         </AuthenticatedLayout>
     );
 }

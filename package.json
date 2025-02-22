@@ -41,6 +41,9 @@
         "@fullcalendar/daygrid": "^6.1.15",
         "@fullcalendar/interaction": "^6.1.15",
         "@fullcalendar/react": "^6.1.15",
-        "@fullcalendar/timegrid": "^6.1.15"
+        "@fullcalendar/timegrid": "^6.1.15",
+        "@gravity-ui/navigation": "^3.0.0",
+        "bootstrap": "^5.3.3",
+        "react-bootstrap": "^2.10.9"
     }
 }
