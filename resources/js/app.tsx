@@ -6,9 +6,10 @@ import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
 import {createRoot} from 'react-dom/client';
 import '@gravity-ui/uikit/styles/fonts.css';
 import '@gravity-ui/uikit/styles/styles.css';
-import {ThemeProvider} from '@gravity-ui/uikit';
+import {ThemeProvider, Toaster, ToasterComponent, ToasterProvider} from '@gravity-ui/uikit';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const toaster = new Toaster();
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -22,7 +23,10 @@ createInertiaApp({
 
         root.render(
             <ThemeProvider theme="dark">
+                <ToasterProvider toaster={toaster}>
             <App {...props} />
+                    <ToasterComponent className="optional additional classes"/>
+                </ToasterProvider>
             </ThemeProvider>,
         );
     },

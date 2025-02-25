@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateRoomRequest;
 use App\Models\Office;
 use App\Models\Room;
 use Illuminate\Http\JsonResponse;
+use Inertia\Inertia;
 
 class RoomController extends Controller
 {
@@ -40,9 +41,12 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Room $room)
+    public function show(string $office_id, Room $room)
     {
-        //
+//        dd($office_id, $room);
+//        $room = Room::query()->findOrFail($room);
+        return Inertia::render('Room', ['room' => $room]);
+
     }
 
     /**
@@ -50,7 +54,7 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
-        //
+
     }
 
     /**

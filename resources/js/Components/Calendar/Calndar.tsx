@@ -1,11 +1,16 @@
 import FullCalendar from '@fullcalendar/react'
-import  interactionPlugin from '@fullcalendar/interaction'
+import interactionPlugin from '@fullcalendar/interaction'
 
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import timeGridPlugin from '@fullcalendar/timegrid'
+import {useEffect, useState} from "react";
 
 export default function Calendar() {
-    const events = [
+
+    const formattedDate = new Date().toISOString().slice(0, 10);
+
+
+    const my_events = [
         {
             title: 'Event 1',
             start: '2025-02-01T10:00:00',
@@ -22,12 +27,27 @@ export default function Calendar() {
         },
         {
             title: 'Event 3',
-            start: '2025-02-10T09:00:00',
-            end: '2025-02-10T11:00:00',
+            start: formattedDate + 'T09:00:00',
+            end: formattedDate + 'T11:00:00',
             color: 'blue',
             creator: 'Bob Johnson'
         }
-    ]
+    ];
+
+    const [events, setEvents] = useState([]);
+
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const response = await fetch('/api/v1/allEvents');
+                const data = await response.json();
+                setEvents(data);
+            } catch (error) {
+                console.error('Error fetching events:', error);
+            }
+        };
+        fetchEvents();
+    }, []);
 
 
 
@@ -36,6 +56,8 @@ export default function Calendar() {
         <FullCalendar
             plugins={[ interactionPlugin,dayGridPlugin,timeGridPlugin ]}
             initialView="dayGridMonth"
+            locale='ru'
+            firstDay={1}
             selectable={true}
             headerToolbar={{
                 left: 'prev,next',
@@ -43,7 +65,7 @@ export default function Calendar() {
                 right: 'timeGridWeek,timeGridDay,timeGridMonth',
             }}
 
-           events = {events}
+            events={my_events}
 
             eventContent={(info) => (
                 <div>

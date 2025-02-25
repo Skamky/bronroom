@@ -53,6 +53,7 @@ export default function Dashboard({offices, selectedOfficeId, data}: DashboardPa
 
                             <TableRooms officeId={Number(currentSelectedOfficeId)}/>
                         </Card>
+                        <br/>
                     </Col>
                     <Col>
                         <Card>

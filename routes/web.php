@@ -26,7 +26,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::redirect('/', 'offices');
 
     Route::resource('offices', OfficeController::class);
-
     Route::prefix('offices/{office_id}')->group(function () {
         Route::apiResource('rooms', RoomController::class);
     });

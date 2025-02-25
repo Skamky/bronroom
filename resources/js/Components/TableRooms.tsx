@@ -17,7 +17,9 @@ export default function TableRooms({officeId}: TableRoomsProps): ReactElement {
     let columns = [
         {id: 'id'},
         {id: 'name', name: 'Название'},
-        {id: 'capacity', name: 'вместимость'},
+        {id: 'capacity', name: 'Вместимость'},
+        {id: 'status'},
+        {id: 'workload'},
         {id: 'description'}
     ]
 
@@ -65,7 +67,12 @@ export default function TableRooms({officeId}: TableRoomsProps): ReactElement {
             selectedIds={selectedIds}
             onSelectionChange={setSelectedIds}
             emptyMessage={noData}
-        />
+            edgePadding={true}
+            onRowClick={(item, index, event) => {
+                console.log('Clicked item:', item);
+                console.log('Row index:', index);
+                console.log('Mouse event:', event);
+            }}/>
     );
 }
 
