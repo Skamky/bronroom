@@ -22,10 +22,10 @@ createInertiaApp({
         const root = createRoot(el);
 
         root.render(
-            <ThemeProvider theme="dark">
+            <ThemeProvider theme="light">
                 <ToasterProvider toaster={toaster}>
             <App {...props} />
-                    <ToasterComponent className="optional additional classes"/>
+                    <ToasterComponent/>
                 </ToasterProvider>
             </ThemeProvider>,
         );

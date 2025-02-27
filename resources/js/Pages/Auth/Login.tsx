@@ -1,11 +1,10 @@
-import Checkbox from '@/Components/Checkbox';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import {Button, Card, Checkbox, TextInput} from '@gravity-ui/uikit';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import {Head, Link, useForm} from '@inertiajs/react';
+import {FormEventHandler} from 'react';
+import Container from "react-bootstrap/Container";
 
 export default function Login({
     status,
@@ -37,19 +36,21 @@ export default function Login({
                     {status}
                 </div>
             )}
-
+            <Container>
+                <Card>
             <form onSubmit={submit}>
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
 
                     <TextInput
+                        size={'l'}
+
                         id="email"
                         type="email"
                         name="email"
                         value={data.email}
                         className="mt-1 block w-full"
                         autoComplete="username"
-                        isFocused={true}
                         onChange={(e) => setData('email', e.target.value)}
                     />
 
@@ -60,6 +61,7 @@ export default function Login({
                     <InputLabel htmlFor="password" value="Password" />
 
                     <TextInput
+                        size={'l'}
                         id="password"
                         type="password"
                         name="password"
@@ -74,7 +76,7 @@ export default function Login({
 
                 <div className="mt-4 block">
                     <label className="flex items-center">
-                        <Checkbox
+                        <Checkbox size={'l'}
                             name="remember"
                             checked={data.remember}
                             onChange={(e) =>
@@ -94,17 +96,19 @@ export default function Login({
                     {canResetPassword && (
                         <Link
                             href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
                         >
                             Forgot your password?
                         </Link>
                     )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                    <br/>
+                    <br/>
+                    <Button size={'l'} view={"action"} type={'submit'} loading={processing}>
                         Log in
-                    </PrimaryButton>
+                    </Button>
                 </div>
             </form>
+                </Card>
+            </Container>
         </GuestLayout>
     );
 }
