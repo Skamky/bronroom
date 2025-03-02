@@ -112,7 +112,7 @@ export default function RoomPage({
             </Col>
             <Col>
                 <Card>
-                    <RoomCalendar></RoomCalendar>
+                    <RoomCalendar room_id={room.id}></RoomCalendar>
                 </Card>
 
 

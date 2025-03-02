@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.SCHEMA:laravel</OriginalElement>
+  <nodes>
+    <node x="927.2845092627597" y="-272.67280164671286">96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.failed_jobs</node>
+    <node x="1458.5611581915555" y="-223.21165681159295">96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.personal_access_tokens</node>
+    <node x="108.0" y="1697.3383819470698">96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.raspisanies</node>
+    <node x="519.5" y="20.0">96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.cache</node>
+    <node x="1163.4566719218647" y="-250.03355078134786">96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.jobs</node>
+    <node x="723.0" y="-272.67280164671286">96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.job_batches</node>
+    <node x="-120.0" y="488.0">96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.users</node>
+    <node x="413.0" y="-140.0">96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.cache_locks</node>
+    <node x="-222.5" y="1125.2841268732368">96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.events</node>
+    <node x="283.0" y="20.0">96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.migrations</node>
+    <node x="-442.8712144175603" y="446.5157749105641">96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.sessions</node>
+    <node x="-95.5" y="-4.0">96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.roles</node>
+    <node x="268.5" y="841.8145684886538">96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.rooms</node>
+    <node x="282.0" y="501.8145684886538">96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.offices</node>
+    <node x="120.5" y="-140.0">96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.password_reset_tokens</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.rooms" target="96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.offices" relationship="REFERENCES">
+      <point x="0.0" y="-104.0" />
+      <point x="0.0" y="104.0" />
+    </edge>
+    <edge source="96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.events" target="96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.users" relationship="REFERENCES">
+      <point x="0.0" y="-104.0" />
+      <point x="0.0" y="128.0" />
+    </edge>
+    <edge source="96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.sessions" target="96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.users" relationship="REFERENCES">
+      <point x="0.0" y="-92.0" />
+      <point x="-353.8712144175603" y="836.0" />
+      <point x="-9.0" y="836.0" />
+      <point x="0.0" y="128.0" />
+    </edge>
+    <edge source="96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.raspisanies" target="96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.events" relationship="REFERENCES">
+      <point x="-111.5" y="-104.0" />
+      <point x="219.5" y="1456.0" />
+      <point x="-9.0" y="1456.0" />
+      <point x="0.0" y="104.0" />
+    </edge>
+    <edge source="96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.users" target="96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.roles" relationship="REFERENCES">
+      <point x="0.0" y="-128.0" />
+      <point x="0.0" y="80.0" />
+    </edge>
+    <edge source="96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.raspisanies" target="96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.rooms" relationship="REFERENCES">
+      <point x="111.5" y="-104.0" />
+      <point x="0.0" y="104.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.7807536015670304" showDependencies="false" x="128.08942539407406" y="1070.4894725926185" />
+  <SelectedNodes>
+    <node>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.cache</node>
+    <node>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.events</node>
+    <node>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.jobs</node>
+    <node>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.rooms</node>
+    <node>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.raspisanies</node>
+    <node>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.failed_jobs</node>
+    <node>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.cache_locks</node>
+    <node>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.users</node>
+    <node>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.offices</node>
+    <node>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.password_reset_tokens</node>
+    <node>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.job_batches</node>
+    <node>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.roles</node>
+    <node>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.personal_access_tokens</node>
+    <node>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.migrations</node>
+    <node>96f6d42c-0419-4b32-a7f1-ea8d188f7be3.TABLE:laravel.sessions</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Columns</Category>
+    <Category>Comments</Category>
+    <Category>Key columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+

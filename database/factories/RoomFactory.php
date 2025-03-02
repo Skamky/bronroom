@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Office;
-use App\Models\Room;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,12 +19,23 @@ class RoomFactory extends Factory
     {
         $office = Office::query()->inRandomOrder()->first();
         return [
-            'name' => $office->name.' '.$this->faker->word,
+            'name' => $office->name . ' K' . $this->faker->unique()->numberBetween(100, 199),
             'description' => $this->faker->sentence,
             'capacity' => $this->faker->numberBetween(1, 10),
             'office_id' => $office->id ,
         ];
     }
 
-
+    public function forOffice(Office $office): Factory|RoomFactory
+    {
+        return $this->state(function (array $attributes) use ($office) {
+            return [
+                'office_id' => $office->id,
+                'name' => $office->name . ' K' . $this->faker->unique()->numberBetween(100, 199),
+            ];
+        });
+    }
 }
+
+
+

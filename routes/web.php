@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FullCalendarController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
@@ -29,6 +30,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('offices/{office_id}')->group(function () {
         Route::apiResource('rooms', RoomController::class);
     });
+
+    Route::any('calendar', [FullCalendarController::class, 'index'])->name('FullCalendarRoute');
 
 
 });

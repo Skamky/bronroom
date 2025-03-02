@@ -37,4 +37,16 @@ class Room extends Model
     {
         return $this->belongsTo(Office::class);
     }
+
+    public function events(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'raspisanies')
+            ->withPivot('start_date', 'end_date')
+            ->using(Raspisanie::class);
+    }
+
+    public function raspisanie()
+    {
+        return $this->belongsTo(Raspisanie::class);
+    }
 }

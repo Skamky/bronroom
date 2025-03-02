@@ -14,7 +14,8 @@ return new class () extends Migration {
             $table->id();
             $table->string('name')->nullable();
             $table->text('description')->nullable();
-            $table->set('type', ['single','every_day','every_week','every_month','rule'])->nullable();
+            $table->foreignId('user_id')->constrained('users');
+            $table->set('type', ['single', 'every_day', 'every_week', 'every_month', 'rule'])->default('single');
             $table->timestamps();
         });
     }

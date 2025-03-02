@@ -6,7 +6,7 @@ use Database\Factories\RaspisanieFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Carbon;
 
 /**
@@ -16,8 +16,8 @@ use Illuminate\Support\Carbon;
  * @property int $user_id
  * @property int $event_id
  * @property int $room_id
- * @property string $start_date
- * @property string $end_date
+ * @property string|Carbon $start_date
+ * @property string|Carbon $end_date
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -36,8 +36,19 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Raspisanie whereUserId($value)
  * @mixin Eloquent
  */
-class Raspisanie extends Model
+class Raspisanie extends Pivot
 {
     /** @use HasFactory<RaspisanieFactory> */
     use HasFactory;
+
+    public $incrementing = true;
+
+    protected function casts(): array
+    {
+        return [
+            'start_date' => 'datetime',
+            'end_date' => 'datetime',
+        ];
+    }
+
 }

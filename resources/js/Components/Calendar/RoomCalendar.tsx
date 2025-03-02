@@ -7,7 +7,11 @@ import {useState} from "react";
 
 import listPlugin from '@fullcalendar/list';
 
-export default function RoomCalendar() {
+interface RoomCalendarProps {
+    room_id?: number | bigint
+}
+
+export default function RoomCalendar({room_id}: RoomCalendarProps) {
 
     const formattedDate = new Date().toISOString().slice(0, 10);
 
@@ -36,20 +40,8 @@ export default function RoomCalendar() {
         }
     ];
 
+
     const [events, setEvents] = useState([]);
-    //
-    // useEffect(() => {
-    //     const fetchEvents = async () => {
-    //         try {
-    //             const response = await fetch('/api/v1/allEvents');
-    //             const data = await response.json();
-    //             setEvents(data);
-    //         } catch (error) {
-    //             console.error('Error fetching events:', error);
-    //         }
-    //     };
-    //     fetchEvents();
-    // }, []);
 
 
     return (
@@ -62,11 +54,27 @@ export default function RoomCalendar() {
             headerToolbar={{
                 left: 'prev,next',
                 center: 'title',
-                right: 'timeGridWeek,timeGridDay,dayGridMonth,listWeek',
+                right: 'timeGridWeek,timeGridDay,dayGridMonth,listWeek,listMonth,listYear',
             }}
 
             nowIndicator={true}
-            events={my_events}
+            events={
+
+                {
+                    url: '/calendar',
+                    method: 'GET',
+                    extraParams: {
+                        rooms: JSON.stringify([room_id]),
+                    },
+                    failure: function () {
+                        alert('there was an error while fetching events!');
+                    },
+
+                }
+
+                // TODO добавить среди источников гугл календарь
+
+            }
 
             eventContent={(info) => (
                 <div>

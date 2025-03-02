@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('raspisanies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
             $table->foreignId('event_id')->constrained('events');
             $table->foreignId('room_id')->constrained('rooms');
             $table->timestampTz('start_date')->comment('Дата начала события в формате ISO 8601 (UTC)');
