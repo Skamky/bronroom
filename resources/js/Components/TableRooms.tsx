@@ -1,8 +1,19 @@
-import {Table, withTableSelection} from '@gravity-ui/uikit';
+import {Table, TableDataItem, withTableSelection} from '@gravity-ui/uikit';
 import React, {ReactElement, useEffect, useState} from 'react';
+import {router} from "@inertiajs/react";
 
 interface TableRoomsProps {
     officeId: number | bigint
+}
+
+interface RoomType extends TableDataItem {
+    id: number;
+    name?: string;
+    capacity?: number;
+    description?: string;
+    office_id?: number;
+    created_at?: string;
+    updated_at?: string;
 }
 
 
@@ -45,10 +56,13 @@ export default function TableRooms({officeId}: TableRoomsProps): ReactElement {
             .then(result => {
                 setData(result);
 
+                //Условия для 404 ошибки
                 if ('message' in result) {
                     setData([])
                     setNoData('No data')
+                    return;
                 }
+                console.log(result);
 
 
             })
@@ -68,10 +82,8 @@ export default function TableRooms({officeId}: TableRoomsProps): ReactElement {
             onSelectionChange={setSelectedIds}
             emptyMessage={noData}
             edgePadding={true}
-            onRowClick={(item, index, event) => {
-                console.log('Clicked item:', item);
-                console.log('Row index:', index);
-                console.log('Mouse event:', event);
+            onRowClick={(room, index, event) => {
+                router.visit(`/offices/${room.office_id}/rooms/${room.id}`);
             }}/>
     );
 }

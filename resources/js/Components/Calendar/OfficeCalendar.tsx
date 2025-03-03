@@ -4,8 +4,9 @@ import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import timeGridPlugin from '@fullcalendar/timegrid'
 import {useEffect, useState} from "react";
+import listPlugin from "@fullcalendar/list";
 
-export default function Calendar() {
+export default function OfficeCalendar() {
 
     const formattedDate = new Date().toISOString().slice(0, 10);
 
@@ -54,7 +55,7 @@ export default function Calendar() {
 
     return (
         <FullCalendar
-            plugins={[ interactionPlugin,dayGridPlugin,timeGridPlugin ]}
+            plugins={[interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin]}
             initialView="dayGridMonth"
             locale='ru'
             firstDay={1}
@@ -62,7 +63,7 @@ export default function Calendar() {
             headerToolbar={{
                 left: 'prev,next',
                 center: 'title',
-                right: 'timeGridWeek,timeGridDay,timeGridMonth',
+                right: 'timeGridWeek,timeGridDay,dayGridMonth,listWeek,listMonth,listYear',
             }}
 
             events={my_events}

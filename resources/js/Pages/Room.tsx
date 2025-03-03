@@ -9,6 +9,7 @@ import {DatePicker} from '@gravity-ui/date-components';
 import RoomCalendar from "@/Components/Calendar/RoomCalendar";
 
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
+import {Head} from "@inertiajs/react";
 
 export interface Room {
     id: number | bigint;
@@ -43,6 +44,8 @@ export default function RoomPage({
             </>
         }
     >
+        <Head title={room.name}/>
+
 
         <Row>
             <Col bsPrefix='col-5'>

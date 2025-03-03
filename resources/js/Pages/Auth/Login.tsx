@@ -4,16 +4,15 @@ import {Button, Card, Checkbox, TextInput} from '@gravity-ui/uikit';
 import GuestLayout from '@/Layouts/GuestLayout';
 import {Head, Link, useForm} from '@inertiajs/react';
 import {FormEventHandler} from 'react';
-import Container from "react-bootstrap/Container";
 
 export default function Login({
-    status,
-    canResetPassword,
-}: {
+                                  status,
+                                  canResetPassword,
+                              }: {
     status?: string;
     canResetPassword: boolean;
 }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const {data, setData, post, processing, errors, reset} = useForm({
         email: '',
         password: '',
         remember: false as boolean,
@@ -29,86 +28,84 @@ export default function Login({
 
     return (
         <GuestLayout>
-            <Head title="Log in" />
+            <Head title="Log in"/>
 
             {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
+                <div className="">
                     {status}
                 </div>
             )}
-            <Container>
-                <Card>
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
+            <Card className='p-2'>
+                <form onSubmit={submit}>
+                    <div>
+                        <InputLabel htmlFor="email" value="Email"/>
 
-                    <TextInput
-                        size={'l'}
+                        <TextInput
+                            size={'l'}
 
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        size={'l'}
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4 block">
-                    <label className="flex items-center">
-                        <Checkbox size={'l'}
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) =>
-                                setData(
-                                    'remember',
-                                    (e.target.checked || false) as false,
-                                )
-                            }
+                            id="email"
+                            type="email"
+                            name="email"
+                            value={data.email}
+                            className="mt-1 block w-full"
+                            autoComplete="username"
+                            onChange={(e) => setData('email', e.target.value)}
                         />
-                        <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
+
+                        <InputError message={errors.email} className="mt-2"/>
+                    </div>
+
+                    <div className="mt-4">
+                        <InputLabel htmlFor="password" value="Password"/>
+
+                        <TextInput
+                            size={'l'}
+                            id="password"
+                            type="password"
+                            name="password"
+                            value={data.password}
+                            className="mt-1 block w-full"
+                            autoComplete="current-password"
+                            onChange={(e) => setData('password', e.target.value)}
+                        />
+
+                        <InputError message={errors.password} className="mt-2"/>
+                    </div>
+
+                    <div className="mt-4 block">
+                        <label className="flex items-center">
+                            <Checkbox size={'l'}
+                                      name="remember"
+                                      checked={data.remember}
+                                      onChange={(e) =>
+                                          setData(
+                                              'remember',
+                                              (e.target.checked || false) as false,
+                                          )
+                                      }
+                            />
+                            <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
                             Remember me
                         </span>
-                    </label>
-                </div>
+                        </label>
+                    </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                        >
-                            Forgot your password?
-                        </Link>
-                    )}
-                    <br/>
-                    <br/>
-                    <Button size={'l'} view={"action"} type={'submit'} loading={processing}>
-                        Log in
-                    </Button>
-                </div>
-            </form>
+                    <div className="mt-4 flex items-center justify-end">
+                        {canResetPassword && (
+                            <Link
+                                href={route('password.request')}
+                            >
+                                Forgot your password?
+                            </Link>
+                        )}
+                        <br/>
+                        <br/>
+                        <Button size={'l'} view={"action"} type={'submit'} loading={processing}>
+                            Log in
+                        </Button>
+                    </div>
+                </form>
                 </Card>
-            </Container>
         </GuestLayout>
     );
 }

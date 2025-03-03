@@ -4,7 +4,7 @@ import TableRooms from "@/Components/TableRooms";
 import {Card, Select} from '@gravity-ui/uikit';
 import {DashboardPageProps} from '@/types';
 import React, {useEffect, useState} from "react";
-import Calendar from "@/Components/Calendar/Calndar";
+import OfficeCalendar from "@/Components/Calendar/OfficeCalendar";
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -57,12 +57,14 @@ export default function Dashboard({offices, selectedOfficeId, data}: DashboardPa
                     </Col>
                     <Col>
                         <Card>
-                            <Calendar></Calendar>
+                            <OfficeCalendar></OfficeCalendar>
                         </Card>
                     </Col>
                 </Row>
 
             </Container>
         </AuthenticatedLayout>
+        // TODO добавить кнопки с быстрыми действиями (поиск свободной переговорки)
+        // TODO добавить интеграцию с гугл календарем
     );
 }
