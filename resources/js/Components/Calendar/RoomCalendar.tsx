@@ -50,7 +50,8 @@ export default function RoomCalendar({room_id}: RoomCalendarProps) {
             initialView="timeGridWeek"
             locale='ru'
             firstDay={1}
-            selectable={true}
+            selectable={false}
+            height={'80vh'}
             headerToolbar={{
                 left: 'prev,next',
                 center: 'title',

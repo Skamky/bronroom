@@ -50,7 +50,7 @@ class OfficeController extends Controller
         $offices = Office::all();
 
 
-        return Inertia::render('Index', ['offices' => $offices,'selectedOfficeId' => $office->id]);
+        return Inertia::render('Index', ['offices' => $offices, 'selectedOffice' => $office]);
     }
 
     /**

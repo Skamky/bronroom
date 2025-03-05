@@ -23,8 +23,7 @@ export default function TableRooms({officeId}: TableRoomsProps): ReactElement {
 
     const [data, setData] = useState([]);
     const [noData, setNoData] = useState('No data');
-    const [selectedIds, setSelectedIds] = React.useState(['1']);
-
+    const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
     let columns = [
         {id: 'id'},
         {id: 'name', name: 'Название'},
@@ -38,6 +37,9 @@ export default function TableRooms({officeId}: TableRoomsProps): ReactElement {
 
 
     useEffect(() => {
+        if (officeId == 0) {
+            return
+        }
         setNoData('Loading...');
         setData([]);
 
@@ -62,7 +64,6 @@ export default function TableRooms({officeId}: TableRoomsProps): ReactElement {
                     setNoData('No data')
                     return;
                 }
-                console.log(result);
 
 
             })

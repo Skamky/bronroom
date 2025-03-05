@@ -18,6 +18,12 @@ export interface DashboardPageProps extends PageProps{
     url: string;
     href: (path?: string) => string;
     offices: { id: string; name: string; timezone:string; location: string|null; description: string|null }[];
-    selectedOfficeId: string;
+    selectedOffice: {
+        id: string;
+        name: string;
+        timezone: string;
+        location: string | null;
+        description: string | null
+    };
     data: { data: string };
 }
