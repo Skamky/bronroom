@@ -17,11 +17,15 @@ export default function Dashboard({offices, selectedOffice, data}: DashboardPage
     let {url} = usePage<DashboardPageProps>();
 
     const currentSelectedOfficeId = selectedOffice?.id ?? '';
+    const [selectedRoomIds, setSelectedRoomIds] = React.useState();
 
 
     const handleCityChange = (officeId: string[]) => {
         router.visit(`/offices/${officeId[0] || ''}`);
     };
+    const handleRoomChange = (roomsId: string[] | number[]) => {
+
+    }
     return (
         <AuthenticatedLayout
             header={
@@ -47,13 +51,13 @@ export default function Dashboard({offices, selectedOffice, data}: DashboardPage
                             />
 
 
-                            <TableRooms officeId={Number(currentSelectedOfficeId)}/>
+                            <TableRooms officeId={Number(currentSelectedOfficeId)} onUpdate={setSelectedRoomIds}/>
                         </Card>
                         <br/>
                     </Col>
                     <Col>
                         <Card>
-                            <OfficeCalendar></OfficeCalendar>
+                            <OfficeCalendar roomIds={selectedRoomIds}></OfficeCalendar>
                         </Card>
                     </Col>
                 </Row>

@@ -28,7 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('offices', OfficeController::class);
     Route::prefix('offices/{office_id}')->group(function () {
-        Route::apiResource('rooms', RoomController::class);
+        Route::apiResource('rooms', RoomController::class)->middleware(\App\Http\Middleware\CacheJsonResponse::class);
     });
 
     Route::any('calendar', [FullCalendarController::class, 'index'])->name('FullCalendarRoute');

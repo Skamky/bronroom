@@ -3,7 +3,8 @@ import React, {ReactElement, useEffect, useState} from 'react';
 import {router} from "@inertiajs/react";
 
 interface TableRoomsProps {
-    officeId: number | bigint
+    officeId: number | bigint,
+    onUpdate?: (roomsId: (string[] | number[])) => void
 }
 
 interface RoomType extends TableDataItem {
@@ -17,7 +18,7 @@ interface RoomType extends TableDataItem {
 }
 
 
-export default function TableRooms({officeId}: TableRoomsProps): ReactElement {
+export default function TableRooms({officeId, onUpdate}: TableRoomsProps): ReactElement {
 
     const MyTable = withTableSelection(Table);
 
@@ -73,6 +74,13 @@ export default function TableRooms({officeId}: TableRoomsProps): ReactElement {
             });
     }, [officeId]);
 
+    function changeSelectedIds(ids: string[]) {
+        setSelectedIds(ids);
+        if (onUpdate) {
+            console.log('update', ids);
+            onUpdate(ids);
+        }
+    }
 
     return (
         <MyTable
@@ -80,7 +88,7 @@ export default function TableRooms({officeId}: TableRoomsProps): ReactElement {
             columns={columns}
             getRowId={getRowId}
             selectedIds={selectedIds}
-            onSelectionChange={setSelectedIds}
+            onSelectionChange={changeSelectedIds}
             emptyMessage={noData}
             edgePadding={true}
             onRowClick={(room, index, event) => {
