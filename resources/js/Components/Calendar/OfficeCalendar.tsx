@@ -79,9 +79,9 @@ export default function OfficeCalendar({roomIds}: OfficeCalendarProps) {
                 }
 
                 let params = {
-                    rooms: roomIds, // Здесь можно динамически подставить значение
                     start: fetchInfo.startStr,
-                    end: fetchInfo.endStr
+                    end: fetchInfo.endStr,
+                    rooms: roomIds // Здесь можно динамически подставить значение
                 };
 
                 axios.post('/calendar',

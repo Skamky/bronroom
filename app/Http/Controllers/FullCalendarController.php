@@ -12,12 +12,23 @@ class FullCalendarController extends Controller
     {
         /** @var array $valid */
         $valid = $request->validated();
-        //TODO продумать жадную загрузку связей
         $rooms = Room::query()->whereIn('id', $valid['rooms'])
             ->with(
                 ['events' =>
-                    fn(Relation $query) => $query->where('raspisanies.start_date', '>=', $valid['start'])
-                        ->where('raspisanies.end_date', '<=', $valid['end'])
+                    fn(Relation $query) => $query->where(function ($query) use ($valid) {
+                        $query->where(function ($query) use ($valid) {
+                            $query->where('raspisanies.start_date', '>=', $valid['start'])
+                                ->where('raspisanies.start_date', '<=', $valid['end']);
+                        })
+                            ->orWhere(function ($query) use ($valid) {
+                                $query->where('raspisanies.end_date', '>=', $valid['start'])
+                                    ->where('raspisanies.end_date', '<=', $valid['end']);
+                            })
+                            ->orWhere(function ($query) use ($valid) {
+                                $query->where('raspisanies.start_date', '<=', $valid['start'])
+                                    ->where('raspisanies.end_date', '>=', $valid['end']);
+                            });
+                    })
                 ]
             )->get();
 
@@ -28,8 +39,8 @@ class FullCalendarController extends Controller
             foreach ($room->events as $event) {
                 $result[] = [
                     'title' => $event->name,
-                    'start' => $event->pivot->start_date,
-                    'end' => $event->pivot->end_date,
+                    'start' => $event->pivot->start_date->toIso8601String(),
+                    'end' => $event->pivot->end_date->toIso8601String(),
                 ];
             }
         }
@@ -37,7 +48,5 @@ class FullCalendarController extends Controller
         //TODO добавить цвет  если выводиться событие конкретного пользователя
 
         return response()->json($result);
-
-
     }
 }

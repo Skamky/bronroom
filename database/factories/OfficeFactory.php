@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use DateTimeZone;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,10 @@ class OfficeFactory extends Factory
      */
     public function definition(): array
     {
+        $timezone = $this->faker->randomElement(DateTimeZone::listIdentifiers());
         return [
-            //
+            'name' => $this->faker->domainWord . ' ' . $timezone,
+            'timezone' => $timezone,
         ];
     }
 }

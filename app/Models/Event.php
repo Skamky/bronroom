@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
+ * @property-read Raspisanie $raspisanie
+ *
  * @property-read \App\Models\TFactory|null $use_factory
  * @method static \Database\Factories\EventFactory factory($count = null, $state = [])
  * @method static Builder<static>|Event newModelQuery()

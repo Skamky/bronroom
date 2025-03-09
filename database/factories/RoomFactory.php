@@ -17,7 +17,7 @@ class RoomFactory extends Factory
      */
     public function definition()
     {
-        $office = Office::query()->inRandomOrder()->first();
+        $office = Office::query()->inRandomOrder()->firstOrFail();
         return [
             'name' => $office->name . ' K' . $this->faker->unique()->numberBetween(100, 199),
             'description' => $this->faker->sentence,
