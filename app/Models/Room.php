@@ -33,6 +33,12 @@ class Room extends Model
     /** @use HasFactory<\Database\Factories\RoomFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'name',       // Поле для названия события
+        'description', // Поле для описания события
+        'user_id',    // Поле для ID пользователя
+    ];
+
     public function office(): BelongsTo
     {
         return $this->belongsTo(Office::class);

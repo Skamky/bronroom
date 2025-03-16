@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\FullCalendarController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
+use App\Http\Middleware\CacheJsonResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -28,10 +30,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('offices', OfficeController::class);
     Route::prefix('offices/{office_id}')->group(function () {
-        Route::apiResource('rooms', RoomController::class)->middleware(\App\Http\Middleware\CacheJsonResponse::class);
+        Route::apiResource('rooms', RoomController::class)->middleware(CacheJsonResponse::class);
     });
 
-    Route::any('calendar', [FullCalendarController::class, 'index'])->name('FullCalendarRoute');
+    Route::any('calendar', [FullCalendarController::class, 'index'])->middleware(CacheJsonResponse::class . ':1')->name('FullCalendarRoute');
+
+    Route::post('events', [EventController::class, 'store'])->name('events.store');
 
 
 });

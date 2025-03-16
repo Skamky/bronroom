@@ -13,7 +13,6 @@ use Illuminate\Support\Carbon;
  *
  *
  * @property int $id
- * @property int $user_id
  * @property int $event_id
  * @property int $room_id
  * @property string|Carbon $start_date
@@ -40,6 +39,15 @@ class Raspisanie extends Pivot
 {
     /** @use HasFactory<RaspisanieFactory> */
     use HasFactory;
+
+    protected $table = 'raspisanies';
+
+    protected $fillable = [
+        'start_date', // Поле для даты начала
+        'end_date',   // Поле для даты окончания
+        'room_id',    // Поле для ID комнаты
+        'event_id',   // Поле для ID события
+    ];
 
     public $incrementing = true;
 
