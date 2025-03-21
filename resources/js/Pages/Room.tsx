@@ -14,21 +14,21 @@ import {DateTime, settings} from "@gravity-ui/date-utils";
 
 
 export interface Room {
-    id: number | bigint;
+    id: number;
     name: string;
     description: string | null;
-    capacity: number | bigint;
-    officeId: number | bigint;
+    capacity: number;
+    officeId: number;
 }
 
-interface EventFormData {
-    date?: DateTime;
-    start_date: string //iso string
-    end_date: string
-    title?: string;
-    description?: string;
+
+type EventFormData = {
+    start_date: string | null //iso string
+    end_date?: string | null
+    title?: string | null;
+    description?: string | null;
     // Дополнительное поле, которое может обновляться логикой приложения
-    room_id: number | bigint;
+    room_id?: number;
 }
 
 
@@ -49,7 +49,7 @@ export default function RoomPage({
         setData,
         post, processing,
         errors
-    } = useForm({
+    } = useForm<EventFormData>({
         start_date: null,
         end_date: null,
         title: null,
@@ -58,7 +58,7 @@ export default function RoomPage({
     });
 
     // Функция для отправки формы
-    const submitForm = (e) => {
+    const submitForm = (e: any) => {
         console.log(e);
         console.log(data)
         e.preventDefault();
@@ -71,7 +71,7 @@ export default function RoomPage({
         setData(e.target.name, e.target.value);
     };
 
-    const handleDateChange = (fieldName: string) => (date: DateTime | null) => {
+    const handleDateChange = (fieldName: "start_date" | "end_date") => (date: DateTime | null) => {
         console.log(['handleDateChange', date?.toISOString(), fieldName]);
         setData(fieldName, date?.toISOString()); // Используйте fieldName для динамического обновления данных
     };
@@ -190,9 +190,9 @@ export default function RoomPage({
                        console.log('вызов тоста2');
 
                    }}>
-                Создано пользователем:
+                Создано пользователем: {auth.user.name}
                 <br/>
-                Название:
+                Название: {data.title}
                 <br/>
                 Дата проведения:
                 <br/>
