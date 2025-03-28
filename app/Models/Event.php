@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
- * @property-read Raspisanie $raspisanie
+ * @property-read array<Raspisanie> $raspisanie
  *
  * @property-read \App\Models\TFactory|null $use_factory
  * @method static \Database\Factories\EventFactory factory($count = null, $state = [])
@@ -43,9 +43,9 @@ class Event extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function raspisanie(): BelongsTo
+    public function raspisanie(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsTo(Raspisanie::class);
+        return $this->hasMany(Raspisanie::class);
     }
 
     public function rooms(): \Illuminate\Database\Eloquent\Relations\BelongsToMany

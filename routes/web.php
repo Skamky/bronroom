@@ -29,8 +29,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::redirect('/', 'offices');
 
     Route::resource('offices', OfficeController::class);
-    Route::prefix('offices/{office_id}')->group(function () {
+    Route::prefix('offices/{office}')->group(function () {
         Route::apiResource('rooms', RoomController::class)->middleware(CacheJsonResponse::class);
+        Route::prefix('rooms/{room}')->group(function () {
+            Route::get('/events/{event}', [EventController::class, 'show'])->name('event.show');
+
+        });
     });
 
     Route::any('calendar', [FullCalendarController::class, 'index'])->middleware(CacheJsonResponse::class . ':1')->name('FullCalendarRoute');

@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
+use App\Models\Office;
 use App\Models\Raspisanie;
 use App\Models\Room;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class EventController extends Controller
 {
@@ -40,13 +42,34 @@ class EventController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *  TODO покрыть тестами
      */
     public function store(StoreEventRequest $request)
     {
+        $data = $request->validated();
+        $room = Room::query()->findOrFail($data['room_id']);
+
+        // Проверка на пересечение событий
+        $overlap = Raspisanie::where('room_id', $data['room_id'])
+            ->where(function ($query) use ($data) {
+                $query->whereBetween('start_date', [$data['start_date'], $data['end_date']])
+                    ->orWhereBetween('end_date', [$data['start_date'], $data['end_date']])
+                    ->orWhere(function ($query) use ($data) {
+                        $query->where('start_date', '<', $data['start_date'])
+                            ->where('end_date', '>', $data['end_date']);
+                    });
+            })
+            ->exists();
+
+        if ($overlap) {
+            return redirect()->back()->withErrors([
+                'overlap' => 'Данное место и время проведения уже заняты!',
+            ]);
+        }
+
+
         DB::beginTransaction();
         try {
-            $data = $request->validated();
-            $room = Room::query()->findOrFail($data['room_id']);
 
             $event = new Event();
             $event->name = $data['title'];
@@ -64,11 +87,10 @@ class EventController extends Controller
 
             DB::commit();
 
-            //TODO сделть редирект на страницу события
-            return response()->json([
-                'event' => $event,
-                'rasp' => $rasp,
-            ], 201);
+            // переход обязательно со стандартным статусом
+            return redirect()->route('event.show', [$room->office_id, $room->id, $event->id]);
+
+
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -81,9 +103,25 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Event $event)
+    public function show(Office $office, Room $room, Event $event): \Inertia\Response
     {
-        //
+        if ($office->id != $room->office_id) {
+            abort(404, 'данная команата не принадлежит данному оффису');
+        }
+        if (!$event->rooms->contains($room)) {
+            abort(404, 'Событие не принадлежит указанной комнате');
+        }
+
+
+        $event->user;
+        //todo переделать как появяться отличные от single события
+        $r = $event->raspisanie[0];
+
+        $event->start = $r->start_date;
+        $event->end = $r->end_date;
+
+        //TODO добавить нормализацию и убрать лишние передаваймые данные
+        return Inertia::render('EventPage', ['event' => $event, 'room' => $room]);
     }
 
     //    /**

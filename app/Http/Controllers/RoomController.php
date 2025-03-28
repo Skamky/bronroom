@@ -13,12 +13,12 @@ class RoomController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @param string $office_id $
+     * @param Office $office $
      * @return JsonResponse
      */
-    public function index(string $office_id)
+    public function index(Office $office)
     {
-        $rooms = Office::query()->findOrFail($office_id)->rooms;
+        $rooms = $office->rooms;
         return response()->json($rooms);
     }
 
@@ -41,7 +41,7 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $office_id, Room $room)
+    public function show(Office $office, Room $room)
     {
 //        dd($office_id, $room);
 //        $room = Room::query()->findOrFail($room);
