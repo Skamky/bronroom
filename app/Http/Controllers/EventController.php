@@ -124,6 +124,13 @@ class EventController extends Controller
         return Inertia::render('EventPage', ['event' => $event, 'room' => $room]);
     }
 
+    public function redirect_show(Event $event): \Illuminate\Http\RedirectResponse
+    {
+        $room = $event->rooms[0];
+        return redirect()->route('event.show', [$room->office_id, $room->id, $event->id]);
+
+    }
+
     //    /**
     //     * Show the form for editing the specified resource.
     //     */

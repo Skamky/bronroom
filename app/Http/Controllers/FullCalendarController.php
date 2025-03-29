@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FullCalendarRequest;
+use App\Models\Event;
 use App\Models\Room;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Auth;
 
+//TODO добавить отдельный обработчик только своих событий
 class FullCalendarController extends Controller
 {
     public function index(FullCalendarRequest $request): \Illuminate\Http\JsonResponse
     {
+        $current_user_id = Auth::id();
         /** @var array $valid */
         $valid = $request->validated();
         $rooms = Room::query()->whereIn('id', $valid['rooms'])
@@ -36,11 +40,14 @@ class FullCalendarController extends Controller
         $result = [];
 
         foreach ($rooms as $room) {
+            /** @var Event $event */
             foreach ($room->events as $event) {
                 $result[] = [
+                    'id' => $event->id,
                     'title' => $event->name,
                     'start' => $event->pivot->start_date->toIso8601String(),
                     'end' => $event->pivot->end_date->toIso8601String(),
+                    ...($current_user_id == $event->user_id ? [] : ['backgroundColor' => 'orange']),
                 ];
             }
         }

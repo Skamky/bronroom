@@ -6,6 +6,8 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import {useState} from "react";
 import listPlugin from "@fullcalendar/list";
 import axios from "axios";
+import {EventClickArg} from "@fullcalendar/core";
+import {router} from "@inertiajs/react";
 
 interface OfficeCalendarProps {
     roomIds: []
@@ -41,7 +43,9 @@ export default function OfficeCalendar({roomIds}: OfficeCalendarProps) {
     ];
 
     const [events, setEvents] = useState([]);
-
+    const handleEventClick = (info: EventClickArg) => {
+        router.visit('/events/' + info.event.id);
+    }
 
     return (
         <FullCalendar
@@ -99,12 +103,8 @@ export default function OfficeCalendar({roomIds}: OfficeCalendarProps) {
             //
             // }
 
-            eventContent={(info) => (
-                <div>
-                    <div>{info.event.title}</div>
-                    <i> {info.event.extendedProps.creator}</i>
-                </div>
-            )}
+            eventClick={handleEventClick}
+
         />
     )
 }

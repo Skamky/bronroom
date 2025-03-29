@@ -4,8 +4,9 @@ import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import timeGridPlugin from '@fullcalendar/timegrid'
 import {useState} from "react";
 
-
 import listPlugin from '@fullcalendar/list';
+import {EventClickArg} from "@fullcalendar/core";
+import {router} from "@inertiajs/react";
 
 interface RoomCalendarProps {
     room_id?: number | bigint
@@ -13,15 +14,16 @@ interface RoomCalendarProps {
 
 export default function RoomCalendar({room_id}: RoomCalendarProps) {
 
-    const formattedDate = new Date().toISOString().slice(0, 10);
-
-
-
     const [events, setEvents] = useState([]);
 
+    const handleEventClick = (info: EventClickArg) => {
+        router.visit('/events/' + info.event.id);
+    }
 
+    // TODO разобраться как отобразить событие при клике на эвент
     return (
         <FullCalendar
+            // themeSystem='bootstrap5'
             plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
             initialView="timeGridWeek"
             locale='ru'
@@ -52,13 +54,7 @@ export default function RoomCalendar({room_id}: RoomCalendarProps) {
                 // TODO добавить среди источников гугл календарь
 
             }
-
-            eventContent={(info) => (
-                <div>
-                    <div>{info.event.title}</div>
-                    <i> {info.event.extendedProps.creator}</i>
-                </div>
-            )}
+            eventClick={handleEventClick}
         />
     )
 }
