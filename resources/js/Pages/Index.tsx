@@ -12,7 +12,7 @@ import Col from 'react-bootstrap/Col';
 
 export default function Dashboard({offices, selectedOffice, data}: DashboardPageProps) {
     //  const evtSource = new EventSource('/stream')
-
+//TODO натолкнуть пользователя на выбор оффиса / сделать выбор оффиса автоматом
 
     let {url} = usePage<DashboardPageProps>();
 

@@ -77,7 +77,6 @@ export default function TableRooms({officeId, onUpdate}: TableRoomsProps): React
     function changeSelectedIds(ids: string[]) {
         setSelectedIds(ids);
         if (onUpdate) {
-            console.log('update', ids);
             onUpdate(ids);
         }
     }

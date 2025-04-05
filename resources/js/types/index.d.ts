@@ -1,3 +1,5 @@
+import {ToastProps} from "@gravity-ui/uikit";
+
 export interface User {
     id: number;
     name: string;
@@ -11,6 +13,7 @@ export type PageProps<
     auth: {
         user: User;
     };
+    toast?: ToastProps
 };
 
 

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\ToastTheme;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
 use App\Models\Office;
 use App\Models\Raspisanie;
 use App\Models\Room;
+use App\Notifications\Toast;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -44,7 +46,7 @@ class EventController extends Controller
      * Store a newly created resource in storage.
      *  TODO покрыть тестами
      */
-    public function store(StoreEventRequest $request)
+    public function store(StoreEventRequest $request): \Illuminate\Http\RedirectResponse
     {
         $data = $request->validated();
         $room = Room::query()->findOrFail($data['room_id']);
@@ -121,6 +123,8 @@ class EventController extends Controller
         $event->end = $r->end_date;
 
         //TODO добавить нормализацию и убрать лишние передаваймые данные
+
+
         return Inertia::render('EventPage', ['event' => $event, 'room' => $room]);
     }
 
@@ -149,9 +153,32 @@ class EventController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * @throws \Throwable
      */
-    public function destroy(Event $event)
+    public function destroy(Event $event): \Illuminate\Http\RedirectResponse
     {
-        //
+        //TODO сделать обработку исключений
+        if ($event->user_id == Auth::id()) {
+            $event->deleteOrFail();
+            session()->put(
+                'toast',
+                Toast::success(
+                    'Удалено',
+                    'Удаление прошло успешно!'
+                )->toArray()
+            );
+            return redirect('/offices');
+
+        } else {
+            session()->put(
+                'toast',
+                Toast::construct_array(
+                    'Ошибка',
+                    'Это событие вам не принадлежит',
+                    ToastTheme::DANGER
+                )
+            );
+            return $this->redirect_show($event);
+        }
     }
 }

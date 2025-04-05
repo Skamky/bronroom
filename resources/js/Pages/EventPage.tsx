@@ -3,8 +3,8 @@ import {Room} from "@/Pages/Room";
 import React from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import {dateTime, DateTime, settings} from "@gravity-ui/date-utils";
-import {User} from '@gravity-ui/uikit';
-import {Head} from "@inertiajs/react";
+import {Button, Card, User} from '@gravity-ui/uikit';
+import {Head, router} from "@inertiajs/react";
 
 interface Event {
     id: number;
@@ -23,7 +23,7 @@ export default function EventPage({
                                       event
                                   }: PageProps<{ room: Room; event: Event }>) {
 
-    // console.debug(event)
+
     settings.loadLocale('ru').then(() => {
         settings.setLocale('ru');
     });
@@ -32,9 +32,10 @@ export default function EventPage({
 
         event.start = dateTime({input: event.start, lang: 'ru'}).locale('ru');
         event.end = dateTime({input: event.end, lang: 'ru'});
+    }
 
-        console.debug([event.start, event.end])
-
+    const handleDeleteClick = function () {
+        router.delete('/events/' + event.id);
 
     }
 
@@ -45,28 +46,33 @@ export default function EventPage({
                 <h2>
                     {event.name}
                 </h2>
-                <label>
-                    <User avatar={{text: event.user.name, theme: 'brand'}} name={event.user.name}
-                          description={event.user.email} size="l"/>
-                </label>
+
             </>
         }
     >
         <Head title={event.name}/>
-        <ul>
-            <li>
-                {/*TODO: разобраться как отобразить дату в русской локали*/}
-                начало: {event.start.toLocaleString()}
-            </li>
-            <li>
-                конец: {event.end.format('LLLL')}
-            </li>
-            <li>
-                описание: {event.description}
-            </li>
-            <li>
-                тип: {event.type}
-            </li>
-        </ul>
+        <Card>
+            <label>
+                <User avatar={{text: event.user.name, theme: 'brand'}} name={event.user.name}
+                      description={event.user.email} size="l"/>
+            </label>
+            <ul>
+                <li>
+                    {/*TODO: разобраться как отобразить дату в русской локали*/}
+                    начало: {event.start.toLocaleString()}
+                </li>
+                <li>
+                    конец: {event.end.format('LLLL')}
+                </li>
+                <li>
+                    описание: {event.description}
+                </li>
+                <li>
+                    тип: {event.type}
+                </li>
+            </ul>
+        </Card>
+        <Button onClick={handleDeleteClick} width='max' view='outlined-danger'>Удалить
+            событие</Button>
     </AuthenticatedLayout>
 }

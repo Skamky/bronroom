@@ -63,7 +63,6 @@ export default function OfficeCalendar({roomIds}: OfficeCalendarProps) {
             events={function (fetchInfo, successCallback, failureCallback) {
                 // Формируем параметры запроса с использованием fetchInfo
                 if (roomIds?.length < 1) {
-                    console.log(['спиок комнат пуст', roomIds])
                     return successCallback([]);
                 }
 

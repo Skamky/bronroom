@@ -38,10 +38,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::get('/events/{event}', [EventController::class, 'redirect_show'])->name('event.redirect.show');
+    Route::post('events', [EventController::class, 'store'])->name('events.store');
+    Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
 
     Route::any('calendar', [FullCalendarController::class, 'index'])->middleware(CacheJsonResponse::class . ':1')->name('FullCalendarRoute');
 
-    Route::post('events', [EventController::class, 'store'])->name('events.store');
 
 
 });

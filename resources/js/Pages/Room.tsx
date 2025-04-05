@@ -31,10 +31,8 @@ export default function RoomPage({
     const handleFocusChange = (isFocused: boolean, inputName: string) => {
         if (isFocused) {
             setFocusedInput(inputName);
-            console.log(`Input ${inputName} is focused`);
         } else {
             setFocusedInput(null);
-            console.log(`Input ${inputName} lost focus`);
         }
     };
 
@@ -60,7 +58,6 @@ export default function RoomPage({
             <Col>
                 <Card>
                     <RoomCalendar room_id={room.id}></RoomCalendar>
-                    {/*<CalendarWithGravityPopup/>*/}
                 </Card>
             </Col>
         </Row>
