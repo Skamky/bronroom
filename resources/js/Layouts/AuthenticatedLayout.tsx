@@ -2,7 +2,7 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
-import {Link, usePage} from '@inertiajs/react';
+import {Link, router, usePage} from '@inertiajs/react';
 import React, {PropsWithChildren, ReactNode, useEffect} from 'react';
 import {NavDropdown} from 'react-bootstrap';
 import {Box, Breadcrumbs} from "@gravity-ui//uikit";
@@ -23,6 +23,7 @@ export default function Authenticated({
         }
     }, [toast]);
     const user = usePage().props.auth.user;
+    const BreadcrumbsData = usePage().props.breadcrumbs;
 
 
     return (
@@ -34,14 +35,14 @@ export default function Authenticated({
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-auto">
-                            <Box width={'400px'}>
-                                <Breadcrumbs showRoot>
-                                    <Breadcrumbs.Item as={Link} href={'/'}>Главная</Breadcrumbs.Item>
-                                    <Breadcrumbs.Item as={Link} href={'/offices/2'}>Офис Москвы</Breadcrumbs.Item>
-                                    <Breadcrumbs.Item as={Link} href={'/offices/2/rooms/1'}>Выбранная
-                                        комната</Breadcrumbs.Item>
-                            </Breadcrumbs>
+                        <Nav className="d-flex w-100">
+                            <Box className="w-100">
+                                <Breadcrumbs onAction={(key) => router.get(key as string)}>
+                                    {BreadcrumbsData.map((item) =>
+                                        <Breadcrumbs.Item key={item.url}>
+                                            {item.text}
+                                        </Breadcrumbs.Item>)}
+                                </Breadcrumbs>
                             </Box>
                         </Nav>
                         <Nav>

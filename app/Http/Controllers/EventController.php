@@ -125,7 +125,7 @@ class EventController extends Controller
         //TODO добавить нормализацию и убрать лишние передаваймые данные
 
 
-        return Inertia::render('EventPage', ['event' => $event, 'room' => $room]);
+        return Inertia::render('ViewEventPage', ['event' => $event, 'room' => $room]);
     }
 
     public function redirect_show(Event $event): \Illuminate\Http\RedirectResponse

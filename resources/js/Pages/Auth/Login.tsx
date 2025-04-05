@@ -41,6 +41,7 @@ export default function Login({
                         <InputLabel htmlFor="email" value="Email"/>
 
                         <TextInput
+                            autoFocus={true}
                             size={'l'}
 
                             id="email"

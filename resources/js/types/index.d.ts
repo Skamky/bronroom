@@ -7,13 +7,18 @@ export interface User {
     email_verified_at?: string;
 }
 
+export type BreadcrumbItem = {
+    url?: string;
+    text: string;
+}
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
     auth: {
         user: User;
     };
-    toast?: ToastProps
+    toast?: ToastProps;
+    breadcrumbs: BreadcrumbItem[];
 };
 
 

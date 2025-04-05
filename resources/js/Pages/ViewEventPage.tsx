@@ -17,7 +17,7 @@ interface Event {
 
 }
 
-export default function EventPage({
+export default function ViewEventPage({
                                       auth,
                                       room,
                                       event
