@@ -8,6 +8,7 @@ import listPlugin from '@fullcalendar/list';
 import {EventClickArg} from "@fullcalendar/core";
 import {router} from "@inertiajs/react";
 import {Button} from "@gravity-ui/uikit";
+import EventPopup from "@/Components/Calendar/EventPopup";
 
 interface RoomCalendarProps {
     room_id?: number | bigint
@@ -73,36 +74,11 @@ export default function RoomCalendar({room_id}: RoomCalendarProps) {
             />
             
             {selectedEvent && isPopupOpen && (
-                <div 
-                    className="position-fixed bg-white shadow rounded border border-secondary"
-                    style={{ 
-                        left: popupPosition.x - popupPosition.offset,
-                        top: popupPosition.y,
-                        width: '300px',
-                        zIndex: 1050,
-                        transform: 'translateY(-100%)'
-                    }}
-                >
-                    <div className="p-3">
-                        <h3 className="h5 mb-3">{selectedEvent.event.title}</h3>
-                        <div className="mb-3">
-                            <p className="mb-2"><strong>Начало:</strong> {selectedEvent.event.start?.toLocaleString()}</p>
-                            <p className="mb-2"><strong>Конец:</strong> {selectedEvent.event.end?.toLocaleString()}</p>
-                            {selectedEvent.event.extendedProps.description && (
-                                <p className="mb-2"><strong>Описание:</strong> {selectedEvent.event.extendedProps.description}</p>
-                            )}
-                        </div>
-                        <div>
-                            <Button 
-                                view="outlined" 
-                                size="s"
-                                onClick={() => setIsPopupOpen(false)}
-                            >
-                                Закрыть
-                            </Button>
-                        </div>
-                    </div>
-                </div>
+                <EventPopup 
+                    event={selectedEvent}
+                    position={popupPosition}
+                    onClose={() => setIsPopupOpen(false)}
+                />
             )}
         </div>
     )

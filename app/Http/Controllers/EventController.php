@@ -114,7 +114,6 @@ class EventController extends Controller
             abort(404, 'Событие не принадлежит указанной комнате');
         }
 
-
         $event->user;
         //todo переделать как появяться отличные от single события
         $r = $event->raspisanie[0];
@@ -122,10 +121,27 @@ class EventController extends Controller
         $event->start = $r->start_date;
         $event->end = $r->end_date;
 
-        //TODO добавить нормализацию и убрать лишние передаваймые данные
-
-
         return Inertia::render('ViewEventPage', ['event' => $event, 'room' => $room]);
+    }
+
+    public function getEventData(Event $event)
+    {
+        $event->load(['user', 'raspisanie']);
+        $r = $event->raspisanie[0];
+        
+        return response()->json([
+            'id' => $event->id,
+            'title' => $event->name,
+            'description' => $event->description,
+            'start' => $r->start_date,
+            'end' => $r->end_date,
+            'user' => [
+                'id' => $event->user->id,
+                'name' => $event->user->name,
+            ],
+            'created_at' => $event->created_at,
+            'updated_at' => $event->updated_at,
+        ]);
     }
 
     public function redirect_show(Event $event): \Illuminate\Http\RedirectResponse

@@ -38,6 +38,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::get('/events/{event}', [EventController::class, 'redirect_show'])->name('event.redirect.show');
+    Route::get('/events/{event}/data', [EventController::class, 'getEventData'])->name('events.data');
     Route::post('events', [EventController::class, 'store'])->name('events.store');
     Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
 
