@@ -69,10 +69,8 @@ class EventController extends Controller
             ]);
         }
 
-
         DB::beginTransaction();
         try {
-
             $event = new Event();
             $event->name = $data['title'];
             $event->description = $data['description'];
@@ -89,15 +87,12 @@ class EventController extends Controller
 
             DB::commit();
 
-            // переход обязательно со стандартным статусом
-            return redirect()->route('event.show', [$room->office_id, $room->id, $event->id]);
-
-
+            // Перенаправляем на страницу редактирования
+            return redirect()->route('event.edit', [$room->office_id, $room->id, $event->id]);
 
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error creating event: ' . $e->getMessage());
-
             throw $e;
         }
     }
@@ -148,23 +143,91 @@ class EventController extends Controller
     {
         $room = $event->rooms[0];
         return redirect()->route('event.show', [$room->office_id, $room->id, $event->id]);
-
     }
 
-    //    /**
-    //     * Show the form for editing the specified resource.
-    //     */
-    //    public function edit(Event $event)
-    //    {
-    //        //
-    //    }
+    public function redirect_edit(Event $event): \Illuminate\Http\RedirectResponse
+    {
+        $room = $event->rooms[0];
+        return redirect()->route('event.edit', [$room->office_id, $room->id, $event->id]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Office $office, Room $room, Event $event): \Inertia\Response
+    {
+        if ($office->id != $room->office_id) {
+            abort(404, 'данная комната не принадлежит данному офису');
+        }
+        if (!$event->rooms->contains($room)) {
+            abort(404, 'Событие не принадлежит указанной комнате');
+        }
+
+        $event->load('user');
+        $r = $event->raspisanie[0];
+        $event->start = $r->start_date;
+        $event->end = $r->end_date;
+
+        return Inertia::render('EditEventPage', ['event' => $event, 'room' => $room]);
+    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEventRequest $request, Event $event)
+    public function update(UpdateEventRequest $request, Event $event): \Illuminate\Http\RedirectResponse
     {
-        //
+        $data = $request->validated();
+        $room = Room::query()->findOrFail($data['room_id']);
+
+        // Проверка на пересечение событий (исключая текущее событие)
+        $overlap = Raspisanie::where('room_id', $data['room_id'])
+            ->where('event_id', '!=', $event->id)
+            ->where(function ($query) use ($data) {
+                $query->whereBetween('start_date', [$data['start_date'], $data['end_date']])
+                    ->orWhereBetween('end_date', [$data['start_date'], $data['end_date']])
+                    ->orWhere(function ($query) use ($data) {
+                        $query->where('start_date', '<', $data['start_date'])
+                            ->where('end_date', '>', $data['end_date']);
+                    });
+            })
+            ->exists();
+
+        if ($overlap) {
+            return redirect()->back()->withErrors([
+                'overlap' => 'Данное место и время проведения уже заняты!',
+            ]);
+        }
+
+        DB::beginTransaction();
+        try {
+            $event->name = $data['title'];
+            $event->description = $data['description'];
+            $event->save();
+
+            // Обновляем расписание
+            $rasp = $event->raspisanie[0];
+            $rasp->start_date = $data['start_date'];
+            $rasp->end_date = $data['end_date'];
+            $rasp->room_id = $room->id;
+            $rasp->save();
+
+            DB::commit();
+
+            session()->put(
+                'toast',
+                Toast::success(
+                    'Обновлено',
+                    'Событие успешно обновлено!'
+                )->toArray()
+            );
+
+            return redirect()->route('event.edit', [$room->office_id, $room->id, $event->id]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error updating event: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     /**

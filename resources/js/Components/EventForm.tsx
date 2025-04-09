@@ -40,12 +40,12 @@ export default function EventForm({
                                       onFocusChange
                                   }: EventFormProps) {
 
-    const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+    const handleFocus = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (onFocusChange) {
             onFocusChange(true, event.target.name);
         }
     };
-    const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    const handleBlur = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (onFocusChange) {
             onFocusChange(false, event.target.name);
         }

@@ -2,6 +2,7 @@ import {EventClickArg} from "@fullcalendar/core";
 import {Button, Skeleton} from "@gravity-ui/uikit";
 import {useEffect, useRef, useState} from "react";
 import axios from "axios";
+import {router} from "@inertiajs/react";
 
 interface EventPopupProps {
     event: EventClickArg;
@@ -121,7 +122,14 @@ export default function EventPopup({event, position, onClose}: EventPopupProps) 
                     )}
                     <p className="mb-2"><strong>Создал:</strong> {eventData.user.name}</p>
                 </div>
-                <div>
+                <div className="flex gap-2">
+                    <Button
+                        view="outlined-action"
+                        size="s"
+                        onClick={() => router.visit(`/events/${eventData.id}/edit`)}
+                    >
+                        Редактировать
+                    </Button>
                     <Button
                         view="outlined"
                         size="s"
