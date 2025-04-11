@@ -3,17 +3,19 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import {Link, router, usePage} from '@inertiajs/react';
-import React, {PropsWithChildren, ReactNode, useEffect} from 'react';
+import React, {PropsWithChildren, ReactNode, useEffect, useState} from 'react';
 import {NavDropdown} from 'react-bootstrap';
-import {Box, Breadcrumbs} from "@gravity-ui//uikit";
+import {Box, Breadcrumbs, Button, Icon} from "@gravity-ui/uikit";
 import {useToaster} from "@gravity-ui/uikit";
-
+import {Moon, Sun} from '@gravity-ui/icons';
 
 export default function Authenticated({
                                           header,
                                           children,
                                       }: PropsWithChildren<{ header?: ReactNode }>) {
-
+    const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+        return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+    });
     const toast = usePage().props.toast;
     const {add} = useToaster();
 
@@ -22,9 +24,16 @@ export default function Authenticated({
             add(toast);
         }
     }, [toast]);
+
     const user = usePage().props.auth.user;
     const BreadcrumbsData = usePage().props.breadcrumbs;
 
+    const toggleTheme = () => {
+        const newTheme = theme === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+        document.documentElement.setAttribute('data-theme', newTheme);
+    };
 
     return (
         <div className="min-h-screen">
@@ -46,22 +55,21 @@ export default function Authenticated({
                             </Box>
                         </Nav>
                         <Nav>
+                            <Button
+                                view="flat"
+                                onClick={toggleTheme}
+                                className="me-2"
+                            >
+                                <Icon data={theme === 'light' ? Moon : Sun} size={16} />
+                            </Button>
                             <NavDropdown
                                 title={user.name}
                             >
-                                {/*<Dropdown.Toggle variant="warning" id="dropdown-basic">*/}
-                                {/*    {user.name}*/}
-                                {/*</Dropdown.Toggle>*/}
-
-                                {/*<Dropdown.Menu>*/}
                                 <NavDropdown.Item as={Link} href={route('profile.edit')}>Profile</NavDropdown.Item>
                                 <NavDropdown.Divider/>
                                 <NavDropdown.Item as={Link} href={route('logout')} method="post">
                                     Log Out
                                 </NavDropdown.Item>
-                                <NavDropdown.Item>
-                                </NavDropdown.Item>
-                                {/*</Dropdown.Menu>*/}
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>

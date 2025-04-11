@@ -11,6 +11,10 @@ import {ThemeProvider, Toaster, ToasterComponent, ToasterProvider} from '@gravit
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 const toaster = new Toaster();
 
+// Get initial theme from localStorage or default to light
+const initialTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.setAttribute('data-theme', initialTheme);
+
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
@@ -22,9 +26,9 @@ createInertiaApp({
         const root = createRoot(el);
 
         root.render(
-            <ThemeProvider theme="light">
+            <ThemeProvider theme={initialTheme}>
                 <ToasterProvider toaster={toaster}>
-            <App {...props} />
+                    <App {...props} />
                     <ToasterComponent/>
                 </ToasterProvider>
             </ThemeProvider>,
