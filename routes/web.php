@@ -32,7 +32,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('offices/{office}')->group(function () {
         Route::apiResource('rooms', RoomController::class)->middleware(CacheJsonResponse::class);
         Route::prefix('rooms/{room}')->group(function () {
-            Route::get('/events/{event}', [EventController::class, 'show'])->name('event.show');
             Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('event.edit');
         });
     });
@@ -46,7 +45,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Редиректы для упрощенного доступа к событиям
-    Route::get('/events/{event}', [EventController::class, 'redirect_show'])->name('event.redirect.show');
     Route::get('/events/{event}/edit', [EventController::class, 'redirect_edit'])->name('event.redirect.edit');
 
     Route::resource('offices', OfficeController::class);

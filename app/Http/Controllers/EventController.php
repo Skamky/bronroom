@@ -10,13 +10,20 @@ use App\Models\Office;
 use App\Models\Raspisanie;
 use App\Models\Room;
 use App\Notifications\Toast;
+use App\Services\EventService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Inertia\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EventController extends Controller
 {
+    public function __construct(
+        private readonly EventService $eventService
+    ) {}
+
     //GET|HEAD        events  events.index › EventController@index
     //POST            events  events.store › EventController@store
     //GET|HEAD        events/{event} ...... events.show › EventController@show
@@ -51,19 +58,7 @@ class EventController extends Controller
         $data = $request->validated();
         $room = Room::query()->findOrFail($data['room_id']);
 
-        // Проверка на пересечение событий
-        $overlap = Raspisanie::where('room_id', $data['room_id'])
-            ->where(function ($query) use ($data) {
-                $query->whereBetween('start_date', [$data['start_date'], $data['end_date']])
-                    ->orWhereBetween('end_date', [$data['start_date'], $data['end_date']])
-                    ->orWhere(function ($query) use ($data) {
-                        $query->where('start_date', '<', $data['start_date'])
-                            ->where('end_date', '>', $data['end_date']);
-                    });
-            })
-            ->exists();
-
-        if ($overlap) {
+        if ($this->eventService->checkEventOverlap($room, $data['start_date'], $data['end_date'])) {
             return redirect()->back()->withErrors([
                 'overlap' => 'Данное место и время проведения уже заняты!',
             ]);
@@ -71,11 +66,7 @@ class EventController extends Controller
 
         DB::beginTransaction();
         try {
-            $event = new Event();
-            $event->name = $data['title'];
-            $event->description = $data['description'];
-            $event->user_id = Auth::id();
-            $event->save();
+            $event = $this->eventService->createEvent($data, Auth::id());
 
             // Создаем расписание
             $rasp = new Raspisanie();
@@ -98,38 +89,23 @@ class EventController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Get event data for API response
      */
-    public function show(Office $office, Room $room, Event $event): \Inertia\Response
-    {
-        if ($office->id != $room->office_id) {
-            abort(404, 'данная команата не принадлежит данному оффису');
-        }
-        if (!$event->rooms->contains($room)) {
-            abort(404, 'Событие не принадлежит указанной комнате');
-        }
-
-        $event->user;
-        //todo переделать как появяться отличные от single события
-        $r = $event->raspisanie[0];
-
-        $event->start = $r->start_date;
-        $event->end = $r->end_date;
-
-        return Inertia::render('ViewEventPage', ['event' => $event, 'room' => $room]);
-    }
-
-    public function getEventData(Event $event)
+    public function getEventData(Event $event): \Illuminate\Http\JsonResponse
     {
         $event->load(['user', 'raspisanie']);
-        $r = $event->raspisanie[0];
+        $schedule = $event->raspisanie->first();
         
+        if (!$schedule) {
+            throw new \RuntimeException('Event schedule not found');
+        }
+
         return response()->json([
             'id' => $event->id,
             'title' => $event->name,
             'description' => $event->description,
-            'start' => $r->start_date,
-            'end' => $r->end_date,
+            'start' => $schedule->start_date,
+            'end' => $schedule->end_date,
             'user' => [
                 'id' => $event->user->id,
                 'name' => $event->user->name,
@@ -139,36 +115,31 @@ class EventController extends Controller
         ]);
     }
 
-    public function redirect_show(Event $event): \Illuminate\Http\RedirectResponse
-    {
-        $room = $event->rooms[0];
-        return redirect()->route('event.show', [$room->office_id, $room->id, $event->id]);
-    }
-
     public function redirect_edit(Event $event): \Illuminate\Http\RedirectResponse
     {
-        $room = $event->rooms[0];
+        $room = $event->rooms->first();
+        if (!$room) {
+            throw new \RuntimeException('Event has no rooms');
+        }
         return redirect()->route('event.edit', [$room->office_id, $room->id, $event->id]);
     }
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * @throws NotFoundHttpException
      */
-    public function edit(Office $office, Room $room, Event $event): \Inertia\Response
+    public function edit(Office $office, Room $room, Event $event): Response
     {
-        if ($office->id != $room->office_id) {
-            abort(404, 'данная комната не принадлежит данному офису');
-        }
-        if (!$event->rooms->contains($room)) {
-            abort(404, 'Событие не принадлежит указанной комнате');
-        }
-
+        $this->validateRoomAndEvent($office, $room, $event);
+        
         $event->load('user');
-        $r = $event->raspisanie[0];
-        $event->start = $r->start_date;
-        $event->end = $r->end_date;
+        $this->loadEventSchedule($event);
 
-        return Inertia::render('EditEventPage', ['event' => $event, 'room' => $room]);
+        return Inertia::render('EditEventPage', [
+            'event' => $event,
+            'room' => $room
+        ]);
     }
 
     /**
@@ -179,76 +150,33 @@ class EventController extends Controller
         $data = $request->validated();
         $room = Room::query()->findOrFail($data['room_id']);
 
-        // Проверка на пересечение событий (исключая текущее событие)
-        $overlap = Raspisanie::where('room_id', $data['room_id'])
-            ->where('event_id', '!=', $event->id)
-            ->where(function ($query) use ($data) {
-                $query->whereBetween('start_date', [$data['start_date'], $data['end_date']])
-                    ->orWhereBetween('end_date', [$data['start_date'], $data['end_date']])
-                    ->orWhere(function ($query) use ($data) {
-                        $query->where('start_date', '<', $data['start_date'])
-                            ->where('end_date', '>', $data['end_date']);
-                    });
-            })
-            ->exists();
-
-        if ($overlap) {
+        if ($this->eventService->checkEventOverlap($room, $data['start_date'], $data['end_date'], $event->id)) {
             return redirect()->back()->withErrors([
                 'overlap' => 'Данное место и время проведения уже заняты!',
             ]);
         }
 
-        DB::beginTransaction();
-        try {
-            $event->name = $data['title'];
-            $event->description = $data['description'];
-            $event->save();
+        $this->eventService->updateEvent($event, $data);
 
-            // Обновляем расписание
-            $rasp = $event->raspisanie[0];
-            $rasp->start_date = $data['start_date'];
-            $rasp->end_date = $data['end_date'];
-            $rasp->room_id = $room->id;
-            $rasp->save();
+        session()->put(
+            'toast',
+            Toast::success(
+                'Обновлено',
+                'Событие успешно обновлено!'
+            )->toArray()
+        );
 
-            DB::commit();
-
-            session()->put(
-                'toast',
-                Toast::success(
-                    'Обновлено',
-                    'Событие успешно обновлено!'
-                )->toArray()
-            );
-
-            return redirect()->route('event.edit', [$room->office_id, $room->id, $event->id]);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Error updating event: ' . $e->getMessage());
-            throw $e;
-        }
+        return redirect()->route('event.edit', [$room->office_id, $room->id, $event->id]);
     }
 
     /**
      * Remove the specified resource from storage.
+     *
      * @throws \Throwable
      */
     public function destroy(Event $event): \Illuminate\Http\RedirectResponse
     {
-        //TODO сделать обработку исключений
-        if ($event->user_id == Auth::id()) {
-            $event->deleteOrFail();
-            session()->put(
-                'toast',
-                Toast::success(
-                    'Удалено',
-                    'Удаление прошло успешно!'
-                )->toArray()
-            );
-            return redirect('/offices');
-
-        } else {
+        if ($event->user_id !== Auth::id()) {
             session()->put(
                 'toast',
                 Toast::construct_array(
@@ -257,7 +185,46 @@ class EventController extends Controller
                     ToastTheme::DANGER
                 )
             );
-            return $this->redirect_show($event);
+            return $this->redirect_edit($event);
+        }
+
+        $this->eventService->deleteEvent($event);
+
+        session()->put(
+            'toast',
+            Toast::success(
+                'Удалено',
+                'Удаление прошло успешно!'
+            )->toArray()
+        );
+
+        return redirect('/offices');
+    }
+
+    /**
+     * Validate that room belongs to office and event belongs to room
+     *
+     * @throws NotFoundHttpException
+     */
+    private function validateRoomAndEvent(Office $office, Room $room, Event $event): void
+    {
+        if ($office->id !== $room->office_id) {
+            abort(404, 'Данная комната не принадлежит данному офису');
+        }
+        if (!$event->rooms->contains($room)) {
+            abort(404, 'Событие не принадлежит указанной комнате');
+        }
+    }
+
+    /**
+     * Load event schedule data
+     */
+    private function loadEventSchedule(Event $event): void
+    {
+        $schedule = $event->raspisanie->first();
+        if ($schedule) {
+            $event->start = $schedule->start_date;
+            $event->end = $schedule->end_date;
         }
     }
 }
