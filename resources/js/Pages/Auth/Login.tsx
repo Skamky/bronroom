@@ -1,6 +1,4 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import {Button, Card, Checkbox, TextInput} from '@gravity-ui/uikit';
+import {Button, Card, Checkbox, TextInput, Label, Text} from '@gravity-ui/uikit';
 import GuestLayout from '@/Layouts/GuestLayout';
 import {Head, Link, useForm} from '@inertiajs/react';
 import {FormEventHandler} from 'react';
@@ -38,12 +36,11 @@ export default function Login({
             <Card className='p-2'>
                 <form onSubmit={submit}>
                     <div>
-                        <InputLabel htmlFor="email" value="Email"/>
+                        <Label>Email</Label>
 
                         <TextInput
                             autoFocus={true}
                             size={'l'}
-
                             id="email"
                             type="email"
                             name="email"
@@ -51,13 +48,12 @@ export default function Login({
                             className="mt-1 block w-full"
                             autoComplete="username"
                             onChange={(e) => setData('email', e.target.value)}
+                            error={errors.email}
                         />
-
-                        <InputError message={errors.email} className="mt-2"/>
                     </div>
 
                     <div className="mt-4">
-                        <InputLabel htmlFor="password" value="Password"/>
+                        <Label>Password</Label>
 
                         <TextInput
                             size={'l'}
@@ -68,9 +64,8 @@ export default function Login({
                             className="mt-1 block w-full"
                             autoComplete="current-password"
                             onChange={(e) => setData('password', e.target.value)}
+                            error={errors.password}
                         />
-
-                        <InputError message={errors.password} className="mt-2"/>
                     </div>
 
                     <div className="mt-4 block">
@@ -99,14 +94,19 @@ export default function Login({
                                 Forgot your password?
                             </Link>
                         )}
-                        <br/>
-                        <br/>
-                        <Button size={'l'} view={"action"} type={'submit'} loading={processing}>
+
+                        <Button
+                            className="ms-4"
+                            type="submit"
+                            view="action"
+                            size="l"
+                            loading={processing}
+                        >
                             Log in
                         </Button>
                     </div>
                 </form>
-                </Card>
+            </Card>
         </GuestLayout>
     );
 }
