@@ -1,4 +1,5 @@
 import '../css/app.css';
+import '../css/transitions.css';
 import './bootstrap';
 
 import {createInertiaApp} from '@inertiajs/react';
@@ -6,7 +7,8 @@ import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
 import {createRoot} from 'react-dom/client';
 import '@gravity-ui/uikit/styles/fonts.css';
 import '@gravity-ui/uikit/styles/styles.css';
-import {ThemeProvider, Toaster, ToasterComponent, ToasterProvider} from '@gravity-ui/uikit';
+import {Toaster, ToasterComponent, ToasterProvider} from '@gravity-ui/uikit';
+import {Wrapper} from '@/Components/Wrapper';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 const toaster = new Toaster();
@@ -26,12 +28,12 @@ createInertiaApp({
         const root = createRoot(el);
 
         root.render(
-            <ThemeProvider theme={initialTheme}>
+            <Wrapper>
                 <ToasterProvider toaster={toaster}>
                     <App {...props} />
                     <ToasterComponent/>
                 </ToasterProvider>
-            </ThemeProvider>,
+            </Wrapper>,
         );
     },
     progress: {
