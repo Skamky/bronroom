@@ -4,10 +4,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import {Link, router, usePage} from '@inertiajs/react';
 import React, {PropsWithChildren, ReactNode, useEffect} from 'react';
-import {NavDropdown} from 'react-bootstrap';
-import {Box, Breadcrumbs, Button, Icon} from "@gravity-ui/uikit";
-import {useToaster} from "@gravity-ui/uikit";
-import {Moon, Sun} from '@gravity-ui/icons';
+import {Box, Breadcrumbs, Button, DropdownMenu, Icon, Tooltip, useToaster} from "@gravity-ui/uikit";
+import {ArrowRightFromSquare, ChevronDown, Moon, PersonPencil, Sun} from '@gravity-ui/icons';
 import {useThemeContext} from '@/Components/Wrapper';
 
 export default function Authenticated({
@@ -51,22 +49,35 @@ export default function Authenticated({
                             </Box>
                         </Nav>
                         <Nav>
-                            <Button
-                                view="flat"
-                                onClick={toggleTheme}
-                                className="me-2"
-                            >
-                                <Icon data={theme === 'light' ? Moon : Sun} size={16} />
-                            </Button>
-                            <NavDropdown
-                                title={user.name}
-                            >
-                                <NavDropdown.Item as={Link} href={route('profile.edit')}>Profile</NavDropdown.Item>
-                                <NavDropdown.Divider/>
-                                <NavDropdown.Item as={Link} href={route('logout')} method="post">
-                                    Log Out
-                                </NavDropdown.Item>
-                            </NavDropdown>
+                            <Tooltip content={theme === 'light' ? 'Включить темную тему' : 'Включить светлую тему'}>
+                                <Button
+                                    view="flat"
+                                    onClick={toggleTheme}
+                                    className="me-2"
+                                >
+                                    <Icon data={theme === 'light' ? Moon : Sun} size={16}/>
+                                </Button>
+                            </Tooltip>
+                            <DropdownMenu
+                                renderSwitcher={(props) => (
+                                    <Button {...props} view="flat" className="d-flex align-items-center">
+                                        <span className="fw-bold text-decoration-underline">{user.name}</span>
+                                        <Icon size={16} data={ChevronDown} className="ms-1"/>
+                                    </Button>
+                                )}
+                                items={[
+                                    {
+                                        iconStart: <Icon size={16} data={PersonPencil}/>,
+                                        action: () => router.visit(route('profile.edit')),
+                                        text: 'Profile',
+                                    },
+                                    {
+                                        iconStart: <Icon size={16} data={ArrowRightFromSquare}/>,
+                                        action: () => router.post(route('logout')),
+                                        text: 'Log Out',
+                                    },
+                                ]}
+                            />
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

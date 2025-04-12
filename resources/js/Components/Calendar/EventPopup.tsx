@@ -1,5 +1,5 @@
 import {EventClickArg} from "@fullcalendar/core";
-import {Button, Skeleton} from "@gravity-ui/uikit";
+import {Button, Card, Skeleton, Text} from "@gravity-ui/uikit";
 import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {router} from "@inertiajs/react";
@@ -70,21 +70,19 @@ export default function EventPopup({event, position, onClose}: EventPopupProps) 
         width: '300px',
         zIndex: 1050,
         transform: 'translateY(-100%)',
-        backgroundColor: 'white',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        borderRadius: '4px',
-        border: '1px solid #dee2e6',
     };
 
     if (loading) {
         return (
             <div ref={popupRef} style={popupStyle}>
-                <div className="p-3">
-                    <Skeleton className="mb-3" style={{ height: '24px', width: '80%' }} />
-                    <Skeleton className="mb-2" style={{ height: '16px', width: '90%' }} />
-                    <Skeleton className="mb-2" style={{ height: '16px', width: '70%' }} />
-                    <Skeleton style={{ height: '32px', width: '100px' }} />
-                </div>
+                <Card view="raised" theme="normal" className="yc-card">
+                    <div className="p-3">
+                        <Skeleton className="mb-3" style={{height: '24px', width: '80%'}}/>
+                        <Skeleton className="mb-2" style={{height: '16px', width: '90%'}}/>
+                        <Skeleton className="mb-2" style={{height: '16px', width: '70%'}}/>
+                        <Skeleton style={{height: '32px', width: '100px'}}/>
+                    </div>
+                </Card>
             </div>
         );
     }
@@ -92,16 +90,18 @@ export default function EventPopup({event, position, onClose}: EventPopupProps) 
     if (error) {
         return (
             <div ref={popupRef} style={popupStyle}>
-                <div className="p-3">
-                    <p className="text-danger">{error}</p>
-                    <Button
-                        view="outlined"
-                        size="s"
-                        onClick={onClose}
-                    >
-                        Закрыть
-                    </Button>
-                </div>
+                <Card view="raised" theme="normal" className="yc-card">
+                    <div className="p-3">
+                        <Text color="danger">{error}</Text>
+                        <Button
+                            view="outlined"
+                            size="s"
+                            onClick={onClose}
+                        >
+                            Закрыть
+                        </Button>
+                    </div>
+                </Card>
             </div>
         );
     }
@@ -112,7 +112,8 @@ export default function EventPopup({event, position, onClose}: EventPopupProps) 
 
     return (
         <div ref={popupRef} style={popupStyle}>
-            <div className="p-3">
+            <Card view="raised" theme="normal" className="p-3">
+
                 <h3 className="h5 mb-3">{eventData.title}</h3>
                 <div className="mb-3">
                     <p className="mb-2"><strong>Начало:</strong> {new Date(eventData.start).toLocaleString()}</p>
@@ -138,7 +139,7 @@ export default function EventPopup({event, position, onClose}: EventPopupProps) 
                         Закрыть
                     </Button>
                 </div>
-            </div>
+            </Card>
         </div>
     );
 }
