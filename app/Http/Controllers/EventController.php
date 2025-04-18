@@ -110,6 +110,7 @@ class EventController extends Controller
                 'id' => $event->user->id,
                 'name' => $event->user->name,
             ],
+            'room_id' => $schedule->room_id,
             'created_at' => $event->created_at,
             'updated_at' => $event->updated_at,
         ]);

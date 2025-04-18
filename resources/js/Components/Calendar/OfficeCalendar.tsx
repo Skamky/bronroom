@@ -10,6 +10,7 @@ import {EventClickArg} from "@fullcalendar/core";
 import {router} from "@inertiajs/react";
 import {Button} from "@gravity-ui/uikit";
 import EventPopup from "@/Components/Calendar/EventPopup";
+import usePopupPosition from "@/hooks/usePopupPosition";
 
 interface OfficeCalendarProps {
     roomIds: []
@@ -18,31 +19,12 @@ interface OfficeCalendarProps {
 export default function OfficeCalendar({roomIds}: OfficeCalendarProps) {
     const [events, setEvents] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState<EventClickArg | null>(null);
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0, offset: 0 });
+    const { popupPosition, isPopupOpen, handleEventClick, setIsPopupOpen } = usePopupPosition();
 
-    const handleEventClick = (info: EventClickArg) => {
+    const handleEventClickWrapper = (info: EventClickArg) => {
         setSelectedEvent(info);
-        const target = info.jsEvent.target as HTMLElement;
-        if (target) {
-            const rect = target.getBoundingClientRect();
-            const viewportWidth = window.innerWidth;
-            const popupWidth = 300; // Ширина попапа
-            
-            // Вычисляем смещение в зависимости от позиции события
-            // Чем ближе к правому краю, тем больше смещение
-            const distanceFromRight = viewportWidth - rect.right;
-            const maxOffset = popupWidth * 0.7; // Увеличили максимальное смещение до 70% ширины попапа
-            const offset = Math.min(maxOffset, Math.max(0, popupWidth - distanceFromRight));
-            
-            setPopupPosition({
-                x: rect.left,
-                y: rect.top,
-                offset: offset
-            });
-            setIsPopupOpen(true);
-        }
-    }
+        handleEventClick(info);
+    };
 
     return (
         <div className="position-relative">
@@ -82,7 +64,7 @@ export default function OfficeCalendar({roomIds}: OfficeCalendarProps) {
                         });
                 }}
 
-                eventClick={handleEventClick}
+                eventClick={handleEventClickWrapper}
             />
             
             {selectedEvent && isPopupOpen && (

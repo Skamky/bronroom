@@ -2,46 +2,74 @@ import FullCalendar from '@fullcalendar/react'
 
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import timeGridPlugin from '@fullcalendar/timegrid'
-import {useState} from "react";
+import {useState, useEffect} from "react";
 
 import listPlugin from '@fullcalendar/list';
-import {EventClickArg} from "@fullcalendar/core";
+import {EventClickArg, EventInput, DatesSetArg, CalendarApi, ViewApi} from "@fullcalendar/core";
 import {router} from "@inertiajs/react";
 import {Button} from "@gravity-ui/uikit";
 import EventPopup from "@/Components/Calendar/EventPopup";
+import axios from 'axios'; // Import axios
+import usePopupPosition from "@/hooks/usePopupPosition";
 
 interface RoomCalendarProps {
     room_id?: number | bigint
 }
 
 export default function RoomCalendar({room_id}: RoomCalendarProps) {
-    const [events, setEvents] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState<EventClickArg | null>(null);
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0, offset: 0 });
+    const { popupPosition, isPopupOpen, handleEventClick, setIsPopupOpen } = usePopupPosition();
+    const [events, setEvents] = useState<EventInput[]>([]);
+    const [calendarApi, setCalendarApi] = useState<CalendarApi | null>(null);
+    const [currentRange, setCurrentRange] = useState<{ start: string; end: string } | null>(null);
 
-    const handleEventClick = (info: EventClickArg) => {
-        setSelectedEvent(info);
-        const target = info.jsEvent.target as HTMLElement;
-        if (target) {
-            const rect = target.getBoundingClientRect();
-            const viewportWidth = window.innerWidth;
-            const popupWidth = 300; // Ширина попапа
-            
-            // Вычисляем смещение в зависимости от позиции события
-            // Чем ближе к правому краю, тем больше смещение
-            const distanceFromRight = viewportWidth - rect.right;
-            const maxOffset = popupWidth * 0.7; // Увеличили максимальное смещение до 70% ширины попапа
-            const offset = Math.min(maxOffset, Math.max(0, popupWidth - distanceFromRight));
-            
-            setPopupPosition({
-                x: rect.left,
-                y: rect.top,
-                offset: offset
+    // Функция для загрузки событий (без кеширования)
+    const fetchEvents = async (start: string, end: string) => {
+        if (!room_id) return;
+
+        try {
+            const response = await axios.get('/calendar', {
+                params: {
+                    rooms: JSON.stringify([room_id]),
+                    start,
+                    end,
+                },
             });
-            setIsPopupOpen(true);
+            setEvents(response.data);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                alert('Ошибка загрузки событий: ' + error.message);
+            } else {
+                alert('Неизвестная ошибка при загрузке событий');
+            }
         }
-    }
+    };
+
+    // Загрузка событий при изменении диапазона или room_id
+    useEffect(() => {
+        if (!currentRange) return;
+        fetchEvents(currentRange.start, currentRange.end);
+    }, [currentRange, room_id]);
+
+    // Обновляем диапазон при изменении вида календаря
+    const handleDatesSet = (info: DatesSetArg) => {
+        setCurrentRange({ start: info.startStr, end: info.endStr });
+    };
+
+    // Обработчик клика на событие + принудительная перезагрузка событий
+    const handleEventClickWrapper = async (info: EventClickArg) => {
+        setSelectedEvent(info);
+        handleEventClick(info);
+
+        // Принудительно перезагружаем события для текущего диапазона
+        if (calendarApi) {
+            const view = calendarApi.view;
+            await fetchEvents(
+                view.activeStart.toISOString(), 
+                view.activeEnd.toISOString()
+            );
+        }
+    };
 
     return (
         <div className="position-relative">
@@ -60,21 +88,14 @@ export default function RoomCalendar({room_id}: RoomCalendarProps) {
                 }}
 
                 nowIndicator={true}
-                events={{
-                    url: '/calendar',
-                    method: 'GET',
-                    extraParams: {
-                        rooms: JSON.stringify([room_id]),
-                    },
-                    failure: function () {
-                        alert('there was an error while fetching events!');
-                    },
-                }}
-                eventClick={handleEventClick}
+                events={events}
+                datesSet={handleDatesSet}
+                eventClick={handleEventClickWrapper}
+                ref={(ref) => ref && setCalendarApi(ref.getApi())}
             />
-            
+
             {selectedEvent && isPopupOpen && (
-                <EventPopup 
+                <EventPopup
                     event={selectedEvent}
                     position={popupPosition}
                     onClose={() => setIsPopupOpen(false)}
