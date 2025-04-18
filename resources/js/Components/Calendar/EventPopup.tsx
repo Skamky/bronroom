@@ -12,6 +12,7 @@ interface EventPopupProps {
         offset: number;
     };
     onClose: () => void;
+    onLoadComplete?: () => void;
 }
 
 interface EventData {
@@ -28,7 +29,7 @@ interface EventData {
     updated_at: string;
 }
 
-export default function EventPopup({event, position, onClose}: EventPopupProps) {
+export default function EventPopup({event, position, onClose, onLoadComplete}: EventPopupProps) {
     const [eventData, setEventData] = useState<EventData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -53,10 +54,10 @@ export default function EventPopup({event, position, onClose}: EventPopupProps) 
                 const response = await axios.get(`/events/${event.event.id}/data`);
                 setEventData(response.data);
             } catch (err) {
-                setError('Не удалось загрузить данные события');
-                console.error('Error fetching event data:', err);
+                setError('Не удалось загрузить данные');
             } finally {
                 setLoading(false);
+                onLoadComplete?.();
             }
         };
 

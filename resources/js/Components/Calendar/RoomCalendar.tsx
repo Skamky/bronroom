@@ -56,18 +56,17 @@ export default function RoomCalendar({room_id}: RoomCalendarProps) {
         setCurrentRange({ start: info.startStr, end: info.endStr });
     };
 
-    // Обработчик клика на событие + принудительная перезагрузка событий
-    const handleEventClickWrapper = async (info: EventClickArg) => {
+    // Обработчик клика на событие (без обновления календаря)
+    const handleEventClickWrapper = (info: EventClickArg) => {
         setSelectedEvent(info);
         handleEventClick(info);
+    };
 
-        // Принудительно перезагружаем события для текущего диапазона
+    // Колбек, вызываемый после загрузки данных в попапе
+    const handlePopupLoadComplete = () => {
         if (calendarApi) {
             const view = calendarApi.view;
-            await fetchEvents(
-                view.activeStart.toISOString(), 
-                view.activeEnd.toISOString()
-            );
+            fetchEvents(view.activeStart.toISOString(), view.activeEnd.toISOString());
         }
     };
 
@@ -99,6 +98,7 @@ export default function RoomCalendar({room_id}: RoomCalendarProps) {
                     event={selectedEvent}
                     position={popupPosition}
                     onClose={() => setIsPopupOpen(false)}
+                    onLoadComplete={handlePopupLoadComplete}
                 />
             )}
         </div>
