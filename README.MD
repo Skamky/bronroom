@@ -5,6 +5,12 @@ sail up -d &&
 sail npm run dev
 ```
 
+миграция бд
+
+```
+     ./vendor/bin/sail artisan migrate --seed
+```
+
 остановка
 
 ````shell
