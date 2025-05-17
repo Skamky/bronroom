@@ -55,4 +55,27 @@ class Room extends Model
     {
         return $this->belongsTo(Raspisanie::class);
     }
+
+    protected function getStatus()
+    {
+        // Проверка на наличие событий в ближайшие 15 минут или занятость в данный момент
+        if ($this->events()->where(function ($query) {
+            $query->where('start_date', '<=', now())
+                ->where('end_date', '>=', now());
+        })->exists()) {
+            return StatusRoom::BUSY;
+        } elseif ($this->events()->where('start_date', '<=', now()->addMinutes(15))
+            ->where('end_date', '>=', now())->exists()) {
+            return StatusRoom::SOON_BUSY;
+        } else {
+            return StatusRoom::FREE;
+        }
+    }
+
+    public function toArray()
+    {
+        $array = parent::toArray();
+        $array['status'] = $this->getStatus();
+        return $array;
+    }
 }
