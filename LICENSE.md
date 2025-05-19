@@ -1,3 +1,6 @@
+Copyright (c) 2025 Komandov Maksim  
+Licensed under the PolyForm Internal Use License 1.0.0  
+
 # PolyForm Internal Use License 1.0.0
 
 <https://polyformproject.org/licenses/internal-use/1.0.0>
