@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('timezone')->comment('IANA timezone format');
             $table->string('location')->nullable();
             $table->string('description')->nullable();
+            $table->timeTz('start_time')->comment('UTC timezone');
+            $table->timeTz('end_time')->comment('UTC timezone');
             $table->timestamps();
         });
     }

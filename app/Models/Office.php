@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $timezone
  * @property string|null $location
  * @property string|null $description
+ * @property Carbon start_time
+ * @property Carbon end_time
+ *
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\TFactory|null $use_factory
@@ -34,6 +38,11 @@ class Office extends Model
 {
     /** @use HasFactory<\Database\Factories\OfficeFactory> */
     use HasFactory;
+
+    protected $casts = [
+        'start_time' => 'datetime:H:i',
+        'end_time' => 'datetime:H:i',
+    ];
 
     public function rooms(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

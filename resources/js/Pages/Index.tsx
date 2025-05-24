@@ -57,7 +57,7 @@ export default function Dashboard({offices, selectedOffice, data}: DashboardPage
                     </Col>
                     <Col>
                         <Card>
-                            <OfficeCalendar roomIds={selectedRoomIds}></OfficeCalendar>
+                            <OfficeCalendar roomIds={selectedRoomIds} office_id={selectedOffice?.id}></OfficeCalendar>
                         </Card>
                     </Col>
                 </Row>

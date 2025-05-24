@@ -6,6 +6,7 @@ use App\Models\Office;
 use DateTimeZone;
 use Exception;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class OfficeSeeder extends Seeder
@@ -20,10 +21,14 @@ class OfficeSeeder extends Seeder
             [
                 'name' => 'Офис Уфы',
                 'timezone' => 'Asia/Yekaterinburg',
+                'start_time' => Carbon::createFromTime(10, 0, 0, 'Asia/Yekaterinburg')->utc(),
+                'end_time' => Carbon::createFromTime(19, 0, 0, 'Asia/Yekaterinburg')->utc(),
             ],
             [
                 'name' => 'Офис Москвы',
-                'timezone' => 'Europe/Moscow'
+                'timezone' => 'Europe/Moscow',
+                'start_time' => Carbon::createFromTime(9, 0, 0, 'Europe/Moscow')->utc(),
+                'end_time' => Carbon::createFromTime(18, 0, 0, 'Europe/Moscow')->utc(),
             ]
         ]);
 

@@ -15,7 +15,7 @@ export interface Room {
     name: string;
     description: string | null;
     capacity: number;
-    officeId: number;
+    office_id: number;
 }
 
 
@@ -57,7 +57,7 @@ export default function RoomPage({
             </Col>
             <Col>
                 <Card>
-                    <RoomCalendar room_id={room.id}></RoomCalendar>
+                    <RoomCalendar room_id={room.id} office_id={room.office_id}></RoomCalendar>
                 </Card>
             </Col>
         </Row>

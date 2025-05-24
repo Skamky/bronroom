@@ -49,8 +49,16 @@ class OfficeController extends Controller
     {
         $offices = Office::all();
 
-
         return Inertia::render('Index', ['offices' => $offices, 'selectedOffice' => $office]);
+    }
+
+    public function businessHours(Office $office): \Illuminate\Http\JsonResponse
+    {
+        return response()->json([
+            'daysOfWeek' => [1, 2, 3, 4, 5],
+            'startTime' => $office->start_time->format('H:i'),
+            'endTime' => $office->end_time->format('H:i')
+        ]);
     }
 
     /**
