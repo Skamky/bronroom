@@ -31,29 +31,23 @@ class EventService
 
     public function createEvent(array $data, int $userId): Event
     {
-        DB::beginTransaction();
-        try {
-            $event = new Event();
-            $event->name = $data['title'];
-            $event->description = $data['description'];
-            $event->user_id = $userId;
-            $event->save();
+        // Убрана внутренняя транзакция — теперь управляется контроллером
+        $event = new Event();
+        $event->name = $data['title'];
+        $event->description = $data['description'];
+        $event->user_id = $userId;
+        $event->save();
 
-            $rasp = new Raspisanie();
-            $rasp->start_date = $data['start_date'];
-            $rasp->end_date = $data['end_date'];
-            $rasp->room_id = $data['room_id'];
-            $rasp->event_id = $event->id;
-            $rasp->save();
+        Raspisanie::create([
+            'start_date' => $data['start_date'],
+            'end_date' => $data['end_date'],
+            'room_id' => $data['room_id'],
+            'event_id' => $event->id
+        ]);
 
-            DB::commit();
-            return $event;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Error creating event: ' . $e->getMessage());
-            throw $e;
-        }
+        return $event;
     }
+
 
     public function updateEvent(Event $event, array $data): Event
     {
@@ -86,4 +80,4 @@ class EventService
     {
         $event->deleteOrFail();
     }
-} 
+}

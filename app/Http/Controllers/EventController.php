@@ -7,7 +7,6 @@ use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
 use App\Models\Office;
-use App\Models\Raspisanie;
 use App\Models\Room;
 use App\Notifications\Toast;
 use App\Services\EventService;
@@ -56,35 +55,32 @@ class EventController extends Controller
     public function store(StoreEventRequest $request): \Illuminate\Http\RedirectResponse
     {
         $data = $request->validated();
-        $room = Room::query()->findOrFail($data['room_id']);
-
-        if ($this->eventService->checkEventOverlap($room, $data['start_date'], $data['end_date'])) {
-            return redirect()->back()->withErrors([
-                'overlap' => 'Данное место и время проведения уже заняты!',
-            ]);
-        }
 
         DB::beginTransaction();
         try {
-            $event = $this->eventService->createEvent($data, Auth::id());
+            // Блокируем комнату для предотвращения конкурентных запросов
+            $room = Room::lockForUpdate()->findOrFail($data['room_id']);
 
-            // Создаем расписание
-            $rasp = new Raspisanie();
-            $rasp->start_date = $data['start_date'];
-            $rasp->end_date = $data['end_date'];
-            $rasp->room_id = $room->id;
-            $rasp->event_id = $event->id;
-            $rasp->save();
+            // Проверяем пересечение с учетом текущей транзакции
+            if ($this->eventService->checkEventOverlap($room, $data['start_date'], $data['end_date'])) {
+                DB::rollBack();
+                return redirect()->back()->withErrors([
+                    'overlap' => 'Данное место и время проведения уже заняты!',
+                ]);
+            }
+
+            // Создаем событие (внутри сервиса уже есть транзакция — убираем дублирование)
+            $event = $this->eventService->createEvent($data, Auth::id());
 
             DB::commit();
 
-            // Перенаправляем на страницу редактирования
-            return redirect()->route('event.edit', [$room->office_id, $room->id, $event->id]);
+            return redirect()->route('event.edit', [$room->office_id, $room->id, $event->id])
+                ->with('success', 'Событие создано!');
 
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error creating event: ' . $e->getMessage());
-            throw $e;
+            return redirect()->back()->withErrors(['error' => 'Ошибка при создании события']);
         }
     }
 
@@ -95,7 +91,7 @@ class EventController extends Controller
     {
         $event->load(['user', 'raspisanie']);
         $schedule = $event->raspisanie->first();
-        
+
         if (!$schedule) {
             throw new \RuntimeException('Event schedule not found');
         }
@@ -133,7 +129,7 @@ class EventController extends Controller
     public function edit(Office $office, Room $room, Event $event): Response
     {
         $this->validateRoomAndEvent($office, $room, $event);
-        
+
         $event->load('user');
         $this->loadEventSchedule($event);
 
