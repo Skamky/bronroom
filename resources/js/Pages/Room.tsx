@@ -8,6 +8,7 @@ import {Card} from "@gravity-ui/uikit";
 import RoomCalendar from "@/Components/Calendar/RoomCalendar";
 import {Head} from "@inertiajs/react";
 import EventForm from "@/Components/EventForm";
+import {StatusBadge} from "@/Components/Room/StatusBadge";
 
 
 export interface Room {
@@ -16,6 +17,7 @@ export interface Room {
     description: string | null;
     capacity: number;
     office_id: number;
+    status: string;
 }
 
 
@@ -27,6 +29,7 @@ export default function RoomPage({
                                  }: PageProps<{ room: Room; }>) {
 
     const [focusedInput, setFocusedInput] = useState<string | null>(null);
+
 
     const handleFocusChange = (isFocused: boolean, inputName: string) => {
         if (isFocused) {
@@ -45,6 +48,7 @@ export default function RoomPage({
                     {room.name}
                 </h2>
                 <label>{room.description}</label>
+                <StatusBadge status={room.status} roomId={room.id}/>
             </>
         }
     >

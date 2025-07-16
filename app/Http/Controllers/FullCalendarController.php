@@ -48,6 +48,7 @@ class FullCalendarController extends Controller
                     'start' => $event->pivot->start_date->toIso8601String(),
                     'end' => $event->pivot->end_date->toIso8601String(),
                     ...($current_user_id == $event->user_id ? [] : ['backgroundColor' => 'orange']),
+                    'user_id' => $event->user_id,
                 ];
             }
         }

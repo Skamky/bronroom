@@ -11,6 +11,7 @@ import EventPopup from "@/Components/Calendar/EventPopup";
 import axios from 'axios'; // Import axios
 import usePopupPosition from "@/hooks/usePopupPosition";
 import {convertUTCToLocalTime} from "@/utils/time";
+import {CalendarService} from "@/services/calendarService";
 
 interface RoomCalendarProps {
     room_id?: number | bigint
@@ -50,14 +51,8 @@ export default function RoomCalendar({room_id, office_id}: RoomCalendarProps) {
         if (!room_id) return;
 
         try {
-            const response = await axios.get('/calendar', {
-                params: {
-                    rooms: JSON.stringify([room_id]),
-                    start,
-                    end,
-                },
-            });
-            setEvents(response.data);
+
+            setEvents(await CalendarService.fetchEvents(room_id, start, end));
         } catch (error: unknown) {
             if (error instanceof Error) {
                 alert('Ошибка загрузки событий: ' + error.message);

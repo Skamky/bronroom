@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 /**
  *
@@ -56,17 +58,26 @@ class Room extends Model
         return $this->belongsTo(Raspisanie::class);
     }
 
-    protected function getStatus()
+    protected function getStatus(Carbon $date = null): StatusRoom
     {
+        if (is_null($date)) {
+            $date = now();
+        }
+
+        $events = $this->events()->where(function ($query) use ($date) {
+            $query->where('start_date', '<=', $date)
+                ->where('end_date', '>=', $date);
+        })->get();
+
         // Проверка на наличие событий в ближайшие 15 минут или занятость в данный момент
-        if ($this->events()->where(function ($query) {
-            $query->where('start_date', '<=', now())
-                ->where('end_date', '>=', now());
-        })->exists()) {
-            return StatusRoom::BUSY;
-        } elseif ($this->events()->where('start_date', '<=', now()->addMinutes(15))
-            ->where('end_date', '>=', now())->exists()) {
-            return StatusRoom::SOON_BUSY;
+        if ($events->count() > 0) {
+            /** @var Event $event */
+            $event = $events->first();
+            if ($event->user_id == Auth::id()) {
+                return StatusRoom::BOOKED;
+            } else {
+                return StatusRoom::BUSY;
+            }
         } else {
             return StatusRoom::FREE;
         }
