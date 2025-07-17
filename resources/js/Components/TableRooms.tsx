@@ -1,6 +1,7 @@
-import {Table, TableDataItem, withTableSelection} from '@gravity-ui/uikit';
+import {Label, Table, TableDataItem, withTableSelection} from '@gravity-ui/uikit';
 import React, {ReactElement, useEffect, useState} from 'react';
 import {router} from "@inertiajs/react";
+import {ensureRoomStatus} from "@/types/room";
 
 interface TableRoomsProps {
     officeId: number | bigint,
@@ -29,7 +30,7 @@ export default function TableRooms({officeId, onUpdate}: TableRoomsProps): React
         {id: 'id'},
         {id: 'name', name: 'Название'},
         {id: 'capacity', name: 'Вместимость'},
-        {id: 'status'},
+        {id: 'status', name: 'Статус',},
         {id: 'workload'},
         {id: 'description'}
     ]
@@ -57,16 +58,20 @@ export default function TableRooms({officeId, onUpdate}: TableRoomsProps): React
             return response.json();
         })
             .then(result => {
-                setData(result);
-
-                //Условия для 404 ошибки
                 if ('message' in result) {
-                    setData([])
-                    setNoData('No data')
+                    setData([]);
+                    setNoData('No data');
                     return;
                 }
+                const transformedData = result.map(room => {
+                    const status = ensureRoomStatus(room.status);
+                    return {
+                        ...room,
+                        status: <Label theme={status.theme}>{status.description}</Label>
+                    };
+                });
 
-
+                setData(transformedData);
             })
             .catch(err => {
                 setData([]);
