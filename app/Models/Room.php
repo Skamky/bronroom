@@ -83,10 +83,42 @@ class Room extends Model
         }
     }
 
+    public function getWorkload()
+    {
+        $today = now();
+        $office = $this->office;
+
+        $workStart = $office->start_time;
+        $workEnd = $office->end_time;
+
+        $expandedStart = $today->copy()->setTimeFrom($workStart)->subMinutes(30);
+        $expandedEnd = $today->copy()->setTimeFrom($workEnd)->addMinutes(30);
+
+        $events = $this->events()
+            ->where(function ($query) use ($expandedStart, $expandedEnd) {
+                $query->where('start_date', '<', $expandedEnd)
+                    ->where('end_date', '>', $expandedStart);
+            })
+            ->get();
+
+        $totalMinutes = $expandedStart->diffInMinutes($expandedEnd);
+        $occupiedMinutes = $events->sum(function ($event) use ($expandedStart, $expandedEnd) {
+
+
+            $start = max($event->pivot->start_date, $expandedStart);
+            $end = min($event->pivot->end_date, $expandedEnd);
+            return $start->diffInMinutes($end);
+        });
+
+        return $totalMinutes > 0 ? ($occupiedMinutes / $totalMinutes) * 100 : 0;
+
+    }
+
     public function toArray()
     {
         $array = parent::toArray();
         $array['status'] = $this->getStatus();
+        $array['workload'] = $this->getWorkload();
         return $array;
     }
 }
