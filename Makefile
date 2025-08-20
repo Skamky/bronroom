@@ -7,3 +7,7 @@ up:
 down:
 	./vendor/bin/sail down
 
+.PHONY: build
+build:
+	./vendor/bin/sail build
+
