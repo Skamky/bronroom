@@ -42,7 +42,8 @@ class OfficeSeeder extends Seeder
             return false; // Продолжаем итерацию
         });
 
-        Office::query()->upsert($offices->all(), ['name', 'timezone']);
-
+        foreach ($offices as $office) {
+            Office::query()->updateOrCreate($office);
+        }
     }
 }

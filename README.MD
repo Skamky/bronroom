@@ -1,34 +1,61 @@
-Запуск приложения в фоне
+Запуск приложения в фоне (для работы приложения обязательно нужен docker)
 
+### Установка (если отсутствует папка vendor и node_modules)
 ```shell
-sail up -d &&
-sail npm run dev
+  docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php84-composer:latest \
+    composer install --ignore-platform-reqs
+```
+```shell
+  ./vendor/bin/sail npm i
+```
+### Настройка alias [sail](https://laravel.su/docs/11.x/sail#nastroika-shell-psevdonimov) для удобства
+
+### Поднятие приложения
+```shell
+  make up
+```
+Генерация секретного ключа (нужно при первом запуске)
+```shell
+  ./vendor/bin/sail artisan key:generate
 ```
 
-миграция бд
-
+### Laravel будет доступен по этому адресу:
 ```
-     ./vendor/bin/sail artisan migrate --seed
+http://localhost:8000
 ```
 
-остановка
+
+### Миграция бд
+```shell
+  ./vendor/bin/sail artisan migrate --seed
+```
+
+### Остановка приложения
 
 ````shell
-sail stop
+  ./vendor/bin/sail stop
 ````
 
-предварительно настройка [sail](https://laravel.su/docs/11.x/sail#nastroika-shell-psevdonimov)
-
-создание модели с миграцией сидером и контроллером
+### Пример создания модели с миграцией сидером и контроллером
 
 ```shell
-sail artisan make:model Role -msc
+  ./vendor/bin/sail artisan make:model Role -msc
 ```
 
+## Тестовый пользователь
 | Параметр | Значение         |
 |----------|------------------|
 | name     | Test User        |
 | email    | test@example.com |
 | password | password         |
 
-
+## Админ пользователь
+| Параметр | Значение          |
+|----------|-------------------|
+| name     | Admin User        |
+| email    | admin@example.com |
+| password | password          |
