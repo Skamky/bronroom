@@ -1,14 +1,14 @@
-import {Label, Table, TableColumnConfig, Tooltip, withTableSelection} from '@gravity-ui/uikit';
+import {Table, TableColumnConfig, Tooltip, withTableSelection, withTableSorting} from '@gravity-ui/uikit';
 import React, {ReactElement, useEffect, useState} from 'react';
 import {router} from "@inertiajs/react";
-import {ensureRoomStatus} from "@/types/room";
+import {AsyncStatusLabel} from "@/Components/Room/StatusLabel";
 
 interface TableRoomsProps {
     officeId: number | bigint,
     onUpdate?: (roomsId: (string[] | number[])) => void
 }
 
-interface RoomType {
+export interface RoomType {
     id: number;
     name?: string;
     capacity?: number;
@@ -21,8 +21,9 @@ interface RoomType {
 }
 
 
+
 export default function TableRooms({officeId, onUpdate}: TableRoomsProps): ReactElement {
-    const MyTable = withTableSelection<RoomType>(Table);
+    const MyTable = withTableSorting(withTableSelection<RoomType>(Table));
 
     const [data, setData] = useState([]);
     const [noData, setNoData] = useState('No data');
@@ -36,19 +37,22 @@ export default function TableRooms({officeId, onUpdate}: TableRoomsProps): React
     };
 
     let columns: TableColumnConfig<RoomType>[] = [
-        {id: 'id'},
-        {id: 'name', name: 'Название'},
-        {id: 'capacity', name: 'Вместимость'},
+        {id: 'id', meta: {sort: true}},
+        {id: 'name', name: 'Название', meta: {sort: true}},
+        {id: 'capacity', name: 'Вместимость', meta: {sort: true}},
         {
-            id: 'status', name: 'Статус', template: (item) => {
-                const status = ensureRoomStatus(item.status);
-                return (<Label theme={status.theme}>{status.description}</Label>)
+            id: 'status',
+            name: 'Статус',
+            meta: {sort: true},
+            template: (item) => {
+                return (<AsyncStatusLabel room={item}/>)
             }
         },
         {
             id: 'workload',
             name: 'Загруженность',
             align: 'center',
+            meta: {sort: true},
             template: (item) => {
                 const workload = item.workload; // исходное значение workload
                 const occupancy = getOccupancyLevel(workload);

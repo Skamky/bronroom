@@ -61,15 +61,6 @@ export const getRoomStatusByValue = (value: string): RoomStatus | undefined => {
     return Object.values(RoomStatus).find((status) => status.value === value);
 };
 
-export const ensureRoomStatus = (value: string): RoomStatus => {
-    const status = getRoomStatusByValue(value);
-    if (!status) {
-        // Возвращаем дефолтный статус вместо ошибки
-        console.warn(`Unknown room status: ${value}, falling back to FREE`);
-        return RoomStatus.FREE;
-    }
-    return status;
-};
 
 // types/room.ts
 
