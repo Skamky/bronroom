@@ -1,17 +1,7 @@
 import {PageProps} from "@/types";
 import {Room} from "@/Pages/Room";
 import React from "react";
-import {
-    Alert,
-    Button,
-    Card,
-    SegmentedRadioGroup,
-    Sheet,
-    Slider,
-    TextArea,
-    ToastProps,
-    useToaster
-} from "@gravity-ui/uikit";
+import {Alert, Button, Card, Sheet, TextArea, ToastProps, useToaster} from "@gravity-ui/uikit";
 import {DateTime, settings} from "@gravity-ui/date-utils";
 import {useForm} from "@inertiajs/react";
 import {DatePicker} from "@gravity-ui/date-components";
@@ -19,7 +9,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
-import {Simulate} from "react-dom/test-utils";
 
 type EventFormData = {
     start_date: string | null //iso string
@@ -149,18 +138,7 @@ export default function EventForm({
 
                 />
                 <br/>
-                <Slider
-                    min={15}
-                    step={15}
-                    max={480}
-                    tooltipDisplay={'on'}
-                ></Slider>
                 <br/>
-                <SegmentedRadioGroup width={'max'} defaultValue={'end'}>
-                    <SegmentedRadioGroup.Option value={'start'} content={'Изменять начало'}/>
-                    <SegmentedRadioGroup.Option value={'end'} content={'Изменять конец'}/>
-                </SegmentedRadioGroup>
-                <br/><br/>
                 <DatePicker
                     label='Окончание события:'
                     // value={data.date}
