@@ -2,20 +2,23 @@ import {PageProps} from "@/types";
 import {Room} from "@/Pages/Room";
 import React from "react";
 import {Alert, Button, Card, Sheet, TextArea, ToastProps, useToaster} from "@gravity-ui/uikit";
-import {DateTime, settings} from "@gravity-ui/date-utils";
 import {useForm} from "@inertiajs/react";
-import {DatePicker} from "@gravity-ui/date-components";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
+
+
+import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import 'dayjs/locale/ru';
+import dayjs from "dayjs";
 
 type EventFormData = {
     start_date: string | null //iso string
     end_date?: string | null
     title?: string | null;
     description?: string | null;
-    // Дополнительное поле, которое может обновляться логикой приложения
     room_id?: number;
 }
 
@@ -40,14 +43,8 @@ export default function EventForm({
         }
     };
 
-
     const [visible, setVisible] = React.useState(false);
     const {add} = useToaster();
-
-    settings.loadLocale('ru').then(() => {
-        settings.setLocale('ru');
-    });
-
 
     const {
         data,
@@ -63,7 +60,6 @@ export default function EventForm({
         room_id: room.id,
     });
 
-    // Функция для отправки формы
     const submitForm = (e: any) => {
         e.preventDefault();
         post('/events', {
@@ -75,29 +71,23 @@ export default function EventForm({
                     content: 'Событие успешно создано!'
                 })
             },
-
-
             onError: (errors) => handleShowToast({
                 name: "err_create_event " + errors.toString(),
                 theme: 'danger',
                 title: 'Ошибка',
                 content: 'Не удалось создать событие'
-
             }),
             onFinish: () => setVisible(false),
-        }); // Будет отправлен POST-запрос по маршруту '/events'
-
+        });
     };
 
-    // Обработчик изменения для input элементов
     const handleChange = (e: any) => {
         setData(e.target.name, e.target.value);
     };
 
-    const handleDateChange = (fieldName: "start_date" | "end_date") => (date: DateTime | null) => {
-        setData(fieldName, date?.toISOString()); // Используйте fieldName для динамического обновления данных
+    const handleDateTimeChange = (fieldName: "start_date" | "end_date") => (date: dayjs.Dayjs | null) => {
+        setData(fieldName, date?.toISOString());
     };
-
 
     const handleShowToast = (props: ToastProps) => {
         props.name = props.name ?? 'toast1'
@@ -114,110 +104,131 @@ export default function EventForm({
         </ul>
     }
 
-    return <>
-        <Card>
-            {Object.keys(errors).length != 0 ? (
-                <Alert theme="warning" title="Ошибка валидации" message={errorsList()}/>) : (<></>)}
-        </Card>
-        <Card>
+    return (
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
+            <Card>
+                {Object.keys(errors).length != 0 ? (
+                    <Alert theme="warning" title="Ошибка валидации" message={errorsList()}/>) : (<></>)}
+            </Card>
+            <Card>
+                <form onSubmit={submitForm}>
+                    <DateTimePicker
+                        label="Начало события:"
+                        value={data.start_date ? dayjs(data.start_date) : null}
+                        onChange={handleDateTimeChange('start_date')}
+                        slotProps={{
+                            textField: {
+                                error: !!errors.start_date,
+                                helperText: errors.start_date,
+                                onFocus: handleFocus,
+                                onBlur: handleBlur,
+                                fullWidth: true,
+                            },
+                        }}
+                        format="DD.MM.YYYY HH:mm"
+                    />
+                    <br/>
+                    <br/>
+                    <DateTimePicker
+                        label="Окончание события:"
+                        value={data.end_date ? dayjs(data.end_date) : null}
+                        onChange={handleDateTimeChange('end_date')}
+                        slotProps={{
+                            textField: {
+                                error: !!errors.end_date,
+                                helperText: errors.end_date,
+                                onFocus: handleFocus,
+                                onBlur: handleBlur,
+                                fullWidth: true,
+                            },
+                        }}
+                        format="DD.MM.YYYY HH:mm"
+                    />
+                    <br/><br/>
+                    <TextArea
+                        name='title'
+                        onChange={handleChange}
+                        placeholder='Название события'
+                        errorMessage={errors.title}
+                        validationState={errors.title ? 'invalid' : undefined}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                    />
+                    <br/><br/>
+                    <TextArea
+                        name='description'
+                        onChange={handleChange}
+                        placeholder='Описание события'
+                        errorMessage={errors.description}
+                        validationState={errors.description ? 'invalid' : undefined}
+                    />
+                    <br/><br/>
+                    <Row>
+                        <Col>
+                            <Button
+                                onClick={() => handleShowToast({
+                                    name: "",
+                                    theme: 'info',
+                                    title: 'событие удалено '
+                                })}
+                                width='max'
+                                view='outlined-danger'
+                            >
+                                Удалить событие
+                            </Button>
+                        </Col>
+                        <Col>
+                            <Button
+                                width='max'
+                                view="outlined-action"
+                                onClick={() => setVisible(true)}
+                            >
+                                Забронировать
+                            </Button>
+                        </Col>
+                    </Row>
+                </form>
+            </Card>
 
-
-            <form
-                onSubmit={submitForm}
-            >
-                <DatePicker
-                    label='Начало события:'
-
-                    // value={data.date}
-                    onUpdate={handleDateChange('start_date')}
-                    format='LL H:m'
-                    errorMessage={errors.start_date}
-                    validationState={errors.start_date ? 'invalid' : undefined}
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-
-                />
-                <br/>
-                <br/>
-                <DatePicker
-                    label='Окончание события:'
-                    // value={data.date}
-                    onUpdate={handleDateChange('end_date')}
-                    format='LL H:m'
-                    errorMessage={errors.end_date}
-                    validationState={errors.end_date ? 'invalid' : undefined}
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                />
-                <br/><br/>
-                <TextArea
-                    name='title'
-                    onChange={handleChange}
-                    placeholder='Название события'
-                    errorMessage={errors.title}
-                    validationState={errors.title ? 'invalid' : undefined}
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                />
-                <br/><br/>
-                <TextArea
-                    name='description'
-                    onChange={handleChange}
-                    placeholder='Описание события'
-                    errorMessage={errors.description}
-                    validationState={errors.description ? 'invalid' : undefined}
-
-                />
-                <br/><br/>
-                <Row>
-                    <Col>
-                        <Button onClick={() => handleShowToast({
-                            name: "",
-                            theme: 'info',
-                            title: 'событие удалено '
-                        })} width='max' view='outlined-danger'>Удалить
-                            событие</Button>
-
-                    </Col>
-                    <Col>
-                        <Button width='max' view="outlined-action"
-                                onClick={() => setVisible(true)}>Забронировать</Button>
-                        {/*<Button name='submut_btn' type='submit' width='max' view='action'>Отправить</Button>*/}
-
-
-                    </Col>
-                </Row>
-            </form>
-        </Card>
-
-        {/*Таблица подтверждения*/}
-        <React.Fragment>
-            <Sheet visible={visible}
-                   title="Подтвердите создание"
-                   onClose={function () {
-                       setVisible(false);
-                       toaster.add({name: 'toast1', theme: 'success'})
-
-                   }}>
-                Создано пользователем: {auth.user.name}
-                <br/>
-                Название: {data.title}
-                <br/>
-                Дата проведения: {data.start_date} - {data.end_date}
-                <br/>
-                Описание: {data.description}
-                <br/>
-                <Button name='submut_btn' type='submit' width='max' view='action' loading={processing}
-                        onClick={submitForm}>Отправить</Button>
-                <br/>
-                <br/>
-                <Button width='max'
+            <React.Fragment>
+                <Sheet
+                    visible={visible}
+                    title="Подтвердите создание"
+                    onClose={function () {
+                        setVisible(false);
+                        toaster.add({name: 'toast1', theme: 'success'})
+                    }}
+                >
+                    Создано пользователем: {auth.user.name}
+                    <br/>
+                    Название: {data.title}
+                    <br/>
+                    Дата проведения: {data.start_date} - {data.end_date}
+                    <br/>
+                    Описание: {data.description}
+                    <br/>
+                    <Button
+                        name='submut_btn'
+                        type='submit'
+                        width='max'
+                        view='action'
+                        loading={processing}
+                        onClick={submitForm}
+                    >
+                        Отправить
+                    </Button>
+                    <br/>
+                    <br/>
+                    <Button
+                        width='max'
                         onClick={function () {
                             setVisible(false)
-                        }}>Отмена</Button>
-            </Sheet>
-        </React.Fragment>
-
-    </>
-
+                        }}
+                    >
+                        Отмена
+                    </Button>
+                </Sheet>
+            </React.Fragment>
+        </LocalizationProvider>
+    );
 }
