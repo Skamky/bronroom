@@ -53,6 +53,7 @@
         "bootstrap": "^5.3.3",
         "dayjs": "^1.11.18",
         "moment-timezone": "^0.5.48",
+        "qrcode.react": "^4.2.0",
         "react-bootstrap": "^2.10.9"
     }
 }

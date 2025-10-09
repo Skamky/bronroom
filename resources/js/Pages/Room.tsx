@@ -9,6 +9,7 @@ import RoomCalendar from "@/Components/Calendar/RoomCalendar";
 import {Head} from "@inertiajs/react";
 import EventForm from "@/Components/EventForm";
 import {StatusBadge} from "@/Components/Room/StatusBadge";
+import QRCodeModal from "@/Components/Qr/QRCodeModal";
 
 
 export interface Room {
@@ -21,7 +22,6 @@ export interface Room {
 }
 
 
-//TODO Сменить UX сделать выбор длительности через dropdown
 //TODO сделать поддержку ссылки
 export default function RoomPage({
                                      auth,
@@ -58,6 +58,8 @@ export default function RoomPage({
             <Col bsPrefix='col-5'>
                 <br/>
                 <EventForm auth={auth} room={room} onFocusChange={handleFocusChange}/>
+                <br/>
+                <QRCodeModal title={room.name} description={room.description}></QRCodeModal>
             </Col>
             <Col>
                 <Card>
