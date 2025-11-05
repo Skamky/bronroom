@@ -59,3 +59,10 @@ http://localhost:8000
 | name     | Admin User        |
 | email    | admin@example.com |
 | password | password          |
+
+| Параметр | Значение        |
+|----------|-----------------|
+| name     | admin           |
+| email    | admin@admin.com |
+| password | password        |
+
