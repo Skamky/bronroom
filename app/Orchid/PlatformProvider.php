@@ -92,6 +92,18 @@ class PlatformProvider extends OrchidServiceProvider
         ];
     }
 
+    public function registerMainMenu(): array
+    {
+        return [
+            // Другие пункты меню...
+
+            Menu::make('Email sender')
+                ->icon('envelope-letter')
+                ->route('platform.email')
+                ->title('Tools')
+        ];
+    }
+
     /**
      * Register permissions for the application.
      *
