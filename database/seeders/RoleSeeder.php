@@ -12,19 +12,19 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $roles = [
-            [
-                'id' => Role::ID_USER,
-                'code' => 'user',
-                'label' => 'Пользователь',
-            ],
-            [
-               'id' => Role::ID_ADMIN,
-                'code' => 'admin',
-                'label' => 'Администратор',
-            ],
-        ];
-        Role::query()->upsert($roles, ['code']);
+//        $roles = [
+//            [
+//                'id' => Role::ID_USER,
+//                'code' => 'user',
+//                'label' => 'Пользователь',
+//            ],
+//            [
+//               'id' => Role::ID_ADMIN,
+//                'code' => 'admin',
+//                'label' => 'Администратор',
+//            ],
+//        ];
+//        Role::query()->upsert($roles, ['code']);
 
     }
 }
