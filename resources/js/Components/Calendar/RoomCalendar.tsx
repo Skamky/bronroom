@@ -90,7 +90,6 @@ export default function RoomCalendar({room_id, office_id}: RoomCalendarProps) {
     return (
         <div className="position-relative">
             <FullCalendar
-                // themeSystem='bootstrap5'
                 plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
                 initialView="timeGridWeek"
                 locale='ru'

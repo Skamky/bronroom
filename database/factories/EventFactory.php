@@ -17,9 +17,13 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
+
+        $title = $this->faker->words($this->faker->numberBetween(1, 3), true);
         return [
-            'name' => $this->faker->name(),
+            'name' => "[{$this->faker->countryISOAlpha3()}] {$title}",
             'description' => $this->faker->text(),
         ];
     }
+
+
 }

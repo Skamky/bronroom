@@ -26,7 +26,6 @@ class OfficeListLayout extends Table
      */
     protected function columns(): iterable
     {
-        //TODO добавить все поля
         return [
             TD::make('id'),
             TD::make('name', 'Name')
