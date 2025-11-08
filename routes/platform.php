@@ -108,4 +108,11 @@ Route::screen('email', \App\Orchid\Screens\EmailSenderScreen::class)->name('plat
     return $trail
         ->parent('platform.index')
         ->push('Email sender');
-});;
+});
+
+Route::screen('office/{office?}', \App\Orchid\Screens\Office\OfficeEditScreen::class)
+    ->name('platform.office.edit');
+
+Route::screen('offices', \App\Orchid\Screens\Office\OfficeListScreen::class)
+    ->name('platform.office.list');
+

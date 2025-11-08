@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Orchid\Screen\AsSource;
 
 /**
  *
@@ -38,10 +39,13 @@ class Office extends Model
 {
     /** @use HasFactory<\Database\Factories\OfficeFactory> */
     use HasFactory;
-
+    use AsSource;
     protected $casts = [
         'start_time' => 'datetime:H:i',
         'end_time' => 'datetime:H:i',
+    ];
+    protected $fillable = [
+        'name', 'start_time', 'end_time', 'timezone', 'location', 'description'
     ];
 
     public function rooms(): \Illuminate\Database\Eloquent\Relations\HasMany
