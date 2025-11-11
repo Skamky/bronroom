@@ -133,12 +133,13 @@ class OfficeEditScreen extends Screen
         return redirect()->route('platform.office.list');
     }
 
-    //TODO проверить метод удаления при связанных комантах
 
 
     /**
      * @return \Illuminate\Http\RedirectResponse
      */
+    //TODO разобраться с удалнием оффисов при связанных комантах
+
     public function remove()
     {
         $this->office->delete();

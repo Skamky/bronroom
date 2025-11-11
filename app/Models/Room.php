@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Orchid\Screen\AsSource;
 
 /**
  *
@@ -34,11 +35,13 @@ class Room extends Model
 {
     /** @use HasFactory<\Database\Factories\RoomFactory> */
     use HasFactory;
-
+    use AsSource;
     protected $fillable = [
         'name',       // Поле для названия события
         'description', // Поле для описания события
         'user_id',    // Поле для ID пользователя
+        'capacity',
+        'office_id'
     ];
 
     public function office(): BelongsTo
