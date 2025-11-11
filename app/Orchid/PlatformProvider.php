@@ -100,7 +100,10 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Email sender')
                 ->icon('envelope-letter')
                 ->route('platform.email')
-                ->title('Tools')
+                ->title('Tools'),
+            Menu::make('Offices')->route('platform.office.list'),
+            Menu::make('Rooms')->route('platform.room.list')
+
         ];
     }
 

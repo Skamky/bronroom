@@ -60,6 +60,9 @@ http://localhost:8000
 | email    | admin@example.com |
 | password | password          |
 
+```shell
+sail artisan orchid:admin admin admin@admin.com password
+```
 | Параметр | Значение        |
 |----------|-----------------|
 | name     | admin           |

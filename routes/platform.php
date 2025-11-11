@@ -111,8 +111,35 @@ Route::screen('email', \App\Orchid\Screens\EmailSenderScreen::class)->name('plat
 });
 
 Route::screen('office/{office?}', \App\Orchid\Screens\Office\OfficeEditScreen::class)
-    ->name('platform.office.edit');
+    ->name('platform.office.edit')
+    ->breadcrumbs(function (Trail $trail, $office = null) {
+        return $trail
+            ->parent('platform.office.list')
+            ->push($office ? 'Edit Office' : 'Create Office',
+                $office ? route('platform.office.edit', $office) : route('platform.office.edit'));
+    });
 
 Route::screen('offices', \App\Orchid\Screens\Office\OfficeListScreen::class)
-    ->name('platform.office.list');
+    ->name('platform.office.list')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->parent('platform.index')
+            ->push('Offices', route('platform.office.list'));
+    });
 
+Route::screen('room/{room?}', \App\Orchid\Screens\Room\RoomEditScreen::class)
+    ->name('platform.room.edit')
+    ->breadcrumbs(function (Trail $trail, $room = null) {
+        return $trail
+            ->parent('platform.room.list')
+            ->push($room ? 'Edit Room' : 'Create Room',
+                $room ? route('platform.room.edit', $room) : route('platform.room.edit'));
+    });
+
+Route::screen('rooms', \App\Orchid\Screens\Room\RoomListScreen::class)
+    ->name('platform.room.list')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->parent('platform.index')
+            ->push('Rooms', route('platform.room.list'));
+    });
