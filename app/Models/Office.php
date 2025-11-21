@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Orchid\Screen\AsSource;
 
 /**
@@ -39,6 +40,7 @@ class Office extends Model
 {
     /** @use HasFactory<\Database\Factories\OfficeFactory> */
     use HasFactory;
+    use SoftDeletes;
     use AsSource;
     protected $casts = [
         'start_time' => 'datetime:H:i',

@@ -46,7 +46,8 @@ class OfficeListScreen extends Screen
         return [
             Link::make('Create new')
                 ->icon('pencil')
-                ->route('platform.office.edit')
+                ->route('platform.office.edit'),
+            Link::make('Deleted office')->route('platform.office.deleted')
         ];
     }
 

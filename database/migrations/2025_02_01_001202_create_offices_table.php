@@ -20,6 +20,7 @@ return new class extends Migration
             $table->timeTz('start_time')->comment('UTC timezone');
             $table->timeTz('end_time')->comment('UTC timezone');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

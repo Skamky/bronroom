@@ -42,4 +42,10 @@ class OfficeListLayout extends Table
 
         ];
     }
+
+    protected function striped(): bool
+    {
+        return true;
+    }
+
 }

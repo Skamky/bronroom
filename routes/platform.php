@@ -127,6 +127,9 @@ Route::screen('offices', \App\Orchid\Screens\Office\OfficeListScreen::class)
             ->push('Offices', route('platform.office.list'));
     });
 
+Route::screen('offices/deleted', \App\Orchid\Screens\Office\DeletedOfficeScreen::class)
+    ->name('platform.office.deleted');
+
 Route::screen('room/{room?}', \App\Orchid\Screens\Room\RoomEditScreen::class)
     ->name('platform.room.edit')
     ->breadcrumbs(function (Trail $trail, $room = null) {
