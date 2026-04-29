@@ -51,7 +51,9 @@ class RoomListScreen extends Screen
         return [
             Link::make('Create new')
                 ->icon('pencil')
-                ->route('platform.room.edit')
+                ->route('platform.room.edit'),
+            Link::make('Deleted rooms')->route('platform.room.deleted')
+
         ];
     }
 

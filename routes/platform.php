@@ -146,3 +146,6 @@ Route::screen('rooms', \App\Orchid\Screens\Room\RoomListScreen::class)
             ->parent('platform.index')
             ->push('Rooms', route('platform.room.list'));
     });
+
+Route::screen('rooms/deleted', \App\Orchid\Screens\Room\DeletedRoomScreen::class)
+    ->name('platform.room.deleted');

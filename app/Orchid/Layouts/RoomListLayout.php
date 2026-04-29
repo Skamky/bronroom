@@ -50,9 +50,16 @@ class RoomListLayout extends Table
                     }
                     return '-';
                 }),
-            TD::make('created_at'),
-            TD::make('updated_at')
+            TD::make('created_at')->defaultHidden(),
+            TD::make('updated_at'),
+            TD::make('deleted_at')->defaultHidden()
 
         ];
     }
+
+    protected function striped(): bool
+    {
+        return true;
+    }
+
 }

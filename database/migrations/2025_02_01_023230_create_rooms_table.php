@@ -17,6 +17,7 @@ return new class () extends Migration {
             $table->text('description')->nullable();
             $table->foreignId('office_id')->constrained('offices');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->unique(['office_id', 'name']);
         });
