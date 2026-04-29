@@ -83,5 +83,7 @@
     "Whoops!": "Упс!",
     "You are receiving this email because we received a password reset request for your account.": "Вы получили это письмо, потому что мы получили запрос на сброс пароля для Вашей учётной записи.",
     "You're logged in!": "Вы уже вошли.",
-    "Your email address is unverified.": "Ваш адрес электронной почты не подтверждён."
+    "Your email address is unverified.": "Ваш адрес электронной почты не подтверждён.",
+    "Offices": "Офисы",
+    "Rooms": "Комнаты"
 }
