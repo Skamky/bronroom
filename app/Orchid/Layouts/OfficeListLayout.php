@@ -28,17 +28,17 @@ class OfficeListLayout extends Table
     {
         return [
             TD::make('id'),
-            TD::make('name', 'Name')
+            TD::make('name', __('office.column_name'))
                 ->render(function (Office $office) {
                     return Link::make($office->name)->route('platform.office.edit', $office);
                 }),
             TD::make('timezone'),
-            TD::make('location', 'Location'),
-            TD::make('start_time', 'Start Date'),
-            TD::make('end_time', 'End Date'),
+            TD::make('location', __('office.column_location')),
+            TD::make('start_time', __('office.column_start_time')),
+            TD::make('end_time', __('office.column_end_time')),
 
-            TD::make('created_at', 'Created'),
-            TD::make('updated_at', 'Last edit'),
+            TD::make('created_at', __('office.column_created_at')),
+            TD::make('updated_at', __('office.column_updated_at')),
 
         ];
     }

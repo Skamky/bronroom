@@ -28,12 +28,12 @@ class OfficeListScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'OfficeListScreen';
+        return __('office.list_title');
     }
 
     public function description(): ?string
     {
-        return 'All office Office description';
+        return __('office.list_description');
     }
 
     /**
@@ -44,10 +44,10 @@ class OfficeListScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Create new')
+            Link::make(__('office.create_new'))
                 ->icon('pencil')
                 ->route('platform.office.edit'),
-            Link::make('Deleted office')->route('platform.office.deleted')
+            Link::make(__('office.deleted_office'))->route('platform.office.deleted')
         ];
     }
 

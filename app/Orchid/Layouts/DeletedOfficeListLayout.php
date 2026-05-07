@@ -19,20 +19,20 @@ class DeletedOfficeListLayout extends OfficeListLayout
     protected function columns(): iterable
     {
         return [...parent::columns(),
-            TD::make('deleted_at', 'Delete'),
-            TD::make('Действия')
+            TD::make('deleted_at', __('office.column_deleted_at')),
+            TD::make(__('office.column_actions'))
                 ->align(TD::ALIGN_CENTER)
                 ->render(function (Office $office) {
                     return Group::make([
-                        Button::make('Восстановить')
+                        Button::make(__('office.restore_button'))
                             ->icon('refresh')
                             ->method('restore', ['officeId' => $office->id])
-                            ->confirm('Восстановить этот офис?'),
+                            ->confirm(__('office.restore_confirm')),
 
-                        Button::make('Стереть')
+                        Button::make(__('office.delete_button'))
                             ->icon('trash')
                             ->method('forceDelete', ['officeId' => $office->id])
-                            ->confirm('Окончательно удалить офис? Это действие нельзя отменить.'),
+                            ->confirm(__('office.delete_confirm')),
                     ]);
                 }),
         ];

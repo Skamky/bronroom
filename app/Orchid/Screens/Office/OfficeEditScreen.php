@@ -44,12 +44,12 @@ class OfficeEditScreen extends Screen
      */
     public function name(): ?string
     {
-        return $this->office->exists ? 'Edit office' : 'Creating a new office';
+        return $this->office->exists ? __('office.edit_title') : __('office.create_title');
     }
 
     public function description(): ?string
     {
-        return 'Оффисы компании';
+        return __('office.description');
     }
 
     /**
@@ -60,17 +60,17 @@ class OfficeEditScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Create office')
+            Button::make(__('office.create_button'))
                 ->icon('pencil')
                 ->method('createOrUpdate')
                 ->canSee(!$this->office->exists),
 
-            Button::make('Update')
+            Button::make(__('office.update_button'))
                 ->icon('note')
                 ->method('createOrUpdate')
                 ->canSee($this->office->exists),
 
-            Button::make('Remove')
+            Button::make(__('office.remove_button'))
                 ->icon('trash')
                 ->method('remove')
                 ->canSee($this->office->exists),
@@ -87,32 +87,32 @@ class OfficeEditScreen extends Screen
         return [
             Layout::rows([
                 Input::make('office.name')
-                    ->title('Name')
-                    ->placeholder('Attractive but mysterious title')
-                    ->help('Название оффиса')->required(),
+                    ->title(__('office.name_label'))
+                    ->placeholder(__('office.name_placeholder'))
+                    ->help(__('office.name_label'))->required(),
 
                 TimeZone::make('office.timezone')->required(),
 
                 DateTimer::make('office.start_time')
-                    ->title('Opening time')
+                    ->title(__('office.opening_time_label'))
                     ->noCalendar()
                     ->format24hr()
                     ->format('H:i:s')
                     ->allowInput()
                     ->required()
-                    ->help('Время открытия по UTC'),
+                    ->help(__('office.opening_time_help')),
 
                 DateTimer::make('office.end_time')
-                    ->title('Closed time')
+                    ->title(__('office.closing_time_label'))
                     ->noCalendar()
                     ->format24hr()
                     ->format('H:i:s')
                     ->allowInput()
                     ->required()
-                    ->help('Время закрытия по UTC'),
+                    ->help(__('office.closing_time_help')),
 
-                Input::make('office.location')->title('Location'),
-                Input::make('office.description')->title('Description'),
+                Input::make('office.location')->title(__('office.location_label')),
+                Input::make('office.description')->title(__('office.description_label')),
 
 
             ])
@@ -128,7 +128,7 @@ class OfficeEditScreen extends Screen
     {
         $this->office->fill($request->get('office'))->save();
 
-        Alert::info('You have successfully saved a office.');
+        Alert::info(__('office.saved_message'));
 
         return redirect()->route('platform.office.list');
     }
@@ -144,7 +144,7 @@ class OfficeEditScreen extends Screen
     {
         $this->office->delete();
 
-        Alert::info('You have successfully deleted the office.');
+        Alert::info(__('office.deleted_message'));
 
         return redirect()->route('platform.office.list');
     }
