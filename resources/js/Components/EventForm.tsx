@@ -1,4 +1,3 @@
-import {PageProps} from "@/types";
 import {Room} from "@/Pages/Room";
 import React from "react";
 import {
@@ -6,7 +5,6 @@ import {
     Button,
     Card,
     SegmentedRadioGroup,
-    SegmentedRadioGroupOption,
     Sheet,
     TextArea,
     ToastProps,
@@ -28,7 +26,9 @@ type EventFormData = {
     room_id?: number;
 }
 
-interface EventFormProps extends PageProps<{ room: Room }> {
+interface EventFormProps {
+    auth: { user: { name: string; id: number; email: string } };
+    room: Room;
     onFocusChange?: (isFocused: boolean, inputName: string) => void;
 }
 
@@ -103,7 +103,7 @@ export default function EventForm({
     };
 
     // Шорткаты для начала события
-    const startShortcuts: SegmentedRadioGroupOption[] = [
+    const startShortcuts: { value: string; content: string }[] = [
         {
             value: 'now',
             content: 'Сейчас',
@@ -126,9 +126,8 @@ export default function EventForm({
         },
     ];
 
-    // Шорткаты для окончания события (зависят от выбранного начала)
     // Шорткаты для окончания события
-    const endShortcuts: SegmentedRadioGroupOption[] = [
+    const endShortcuts: { value: string; content: string }[] = [
         {
             value: '15min',
             content: '15 мин',
@@ -218,13 +217,15 @@ export default function EventForm({
     };
 
     const errorsList = function () {
-        return <ul>
-            {Object.entries(errors).map(([field, errorMessage]) => (
-                <li key={field}>
-                    <strong>{field}:</strong> {errorMessage}
-                </li>
-            ))}
-        </ul>
+        return (
+            <ul>
+                {Object.entries(errors).map(([field, errorMessage]) => (
+                    <li key={field}>
+                        <strong>{field}:</strong> {errorMessage}
+                    </li>
+                ))}
+            </ul>
+        )
     }
 
     const startDateValue = data.start_date ? dayjs(data.start_date) : null;
@@ -234,7 +235,10 @@ export default function EventForm({
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
             <Card>
                 {Object.keys(errors).length != 0 ? (
-                    <Alert theme="warning" title="Ошибка валидации" message={errorsList()}/>) : (<></>)}
+                    <Alert theme="warning" title="Ошибка валидации" message={errorsList()}/>
+                ) : (
+                    <></>
+                )}
             </Card>
             <Card>
                 <form onSubmit={submitForm}>
@@ -261,7 +265,7 @@ export default function EventForm({
                                 size="m"
                                 name="start-shortcuts"
                                 options={startShortcuts}
-                                onChange={(event) => handleStartShortcut(event.target.value)}
+                                onChange={(event: any) => handleStartShortcut(event.target.value)}
                             />
                         </div>
                     </div>
@@ -289,7 +293,7 @@ export default function EventForm({
                                 size="m"
                                 name="end-shortcuts"
                                 options={endShortcuts}
-                                onChange={(event) => handleEndShortcut(event.target.value)}
+                                onChange={(event: any) => handleEndShortcut(event.target.value)}
                                 disabled={!data.start_date}
                             />
                         </div>

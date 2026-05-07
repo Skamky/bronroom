@@ -2,20 +2,29 @@ import React, {useState} from 'react';
 import {Button, Modal} from '@gravity-ui/uikit';
 import {QRCodeSVG} from 'qrcode.react';
 
+interface QRCodeModalProps {
+    title?: string;
+    buttonText?: string;
+    description?: string | null;
+}
+
 const QRCodeModal = ({
                          title = 'QR Code',
                          buttonText = 'QR',
                          description = null
-                     }) => {
+                     }: QRCodeModalProps) => {
     const [open, setOpen] = useState(false);
 
     const currentUrl = window.location.href;
 
     const handlePrint = () => {
-        const printContent = document.getElementById('printable-qr-content').innerHTML;
-        const printWindow = window.open('', '_blank');
+        const printContent = document.getElementById('printable-qr-content')?.innerHTML;
+        if (!printContent) return;
 
-        printWindow.document.write(`
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) return;
+
+        printWindow!.document.write(`
       <!DOCTYPE html>
       <html>
         <head>
@@ -63,7 +72,7 @@ const QRCodeModal = ({
         </body>
       </html>
     `);
-        printWindow.document.close();
+        printWindow!.document.close();
     };
 
     return (
