@@ -72,9 +72,10 @@ export default function ViewEventPage({
                 </li>
             </ul>
         </Card>
-        {/*TODO скрывать кнопку если эвент пользователю не принадлежит  */}
-        <Button onClick={handleDeleteClick} width='max' view='outlined-danger'>
-            Удалить событие
-        </Button>
+        {event.user.id === auth.user.id && (
+            <Button onClick={handleDeleteClick} width='max' view='outlined-danger'>
+                Удалить событие
+            </Button>
+        )}
     </AuthenticatedLayout>
 }

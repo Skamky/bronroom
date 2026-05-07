@@ -13,8 +13,6 @@ import {
     useToaster
 } from "@gravity-ui/uikit";
 import {useForm} from "@inertiajs/react";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import {toaster} from '@gravity-ui/uikit/toaster-singleton';
 import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
@@ -315,30 +313,13 @@ export default function EventForm({
                         validationState={errors.description ? 'invalid' : undefined}
                     />
                     <br/><br/>
-                    <Row>
-                        <Col>
-                            <Button
-                                onClick={() => handleShowToast({
-                                    name: "",
-                                    theme: 'info',
-                                    title: 'событие удалено '
-                                })}
-                                width='max'
-                                view='outlined-danger'
-                            >
-                                Удалить событие
-                            </Button>
-                        </Col>
-                        <Col>
-                            <Button
-                                width='max'
-                                view="outlined-action"
-                                onClick={() => setVisible(true)}
-                            >
-                                Забронировать
-                            </Button>
-                        </Col>
-                    </Row>
+                    <Button
+                        width='max'
+                        view="outlined-action"
+                        onClick={() => setVisible(true)}
+                    >
+                        Забронировать
+                    </Button>
                 </form>
             </Card>
 

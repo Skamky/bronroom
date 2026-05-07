@@ -2,7 +2,8 @@ import {EventClickArg} from "@fullcalendar/core";
 import {Button, Card, Skeleton, Text} from "@gravity-ui/uikit";
 import {useEffect, useRef, useState} from "react";
 import axios from "axios";
-import {router} from "@inertiajs/react";
+import {router, usePage} from "@inertiajs/react";
+import {PageProps} from "@/types";
 
 interface EventPopupProps {
     event: EventClickArg;
@@ -30,6 +31,9 @@ interface EventData {
 }
 
 export default function EventPopup({event, position, onClose, onLoadComplete}: EventPopupProps) {
+    const {auth} = usePage<PageProps>().props;
+    const currentUser = auth?.user ?? null;
+
     const [eventData, setEventData] = useState<EventData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -125,13 +129,15 @@ export default function EventPopup({event, position, onClose, onLoadComplete}: E
                     <p className="mb-2"><strong>Создал:</strong> {eventData.user.name}</p>
                 </div>
                 <div className="flex gap-2">
-                    <Button
-                        view="outlined-action"
-                        size="s"
-                        onClick={() => router.visit(`/events/${eventData.id}/edit`)}
-                    >
-                        Редактировать
-                    </Button>
+                    {currentUser && eventData.user.id === currentUser.id && (
+                        <Button
+                            view="outlined-action"
+                            size="s"
+                            onClick={() => router.visit(`/events/${eventData.id}/edit`)}
+                        >
+                            Редактировать
+                        </Button>
+                    )}
                     <Button
                         view="outlined"
                         size="s"

@@ -23,7 +23,7 @@ export default function EditEventPage({
     event
 }: PageProps<{ room: Room; event: Event }>) {
     const [isEditing, setIsEditing] = useState(false);
-    
+
     settings.loadLocale('ru').then(() => {
         settings.setLocale('ru');
     });
@@ -82,10 +82,10 @@ export default function EditEventPage({
             <Head title={event.name} />
             <Card>
                 <div className="mb-4">
-                    <User 
-                        avatar={{ text: event.user.name, theme: 'brand' }} 
+                    <User
+                        avatar={{text: event.user.name, theme: 'brand'}}
                         name={event.user.name}
-                        description={event.user.email} 
+                        description={event.user.email}
                         size="l"
                     />
                 </div>
@@ -152,17 +152,19 @@ export default function EditEventPage({
                                 <strong>Тип:</strong> {event.type}
                             </li>
                         </ul>
-                        <div className="flex gap-2">
-                            <Button onClick={handleEditClick} view="outlined-action">
-                                Редактировать
-                            </Button>
-                            <Button onClick={handleDeleteClick} view="outlined-danger">
-                                Удалить
-                            </Button>
-                        </div>
+                        {event.user.id === auth.user.id && (
+                            <div className="flex gap-2">
+                                <Button onClick={handleEditClick} view="outlined-action">
+                                    Редактировать
+                                </Button>
+                                <Button onClick={handleDeleteClick} view="outlined-danger">
+                                    Удалить
+                                </Button>
+                            </div>
+                        )}
                     </>
                 )}
             </Card>
         </AuthenticatedLayout>
     );
-} 
+}
