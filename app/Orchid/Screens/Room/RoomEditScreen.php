@@ -38,7 +38,7 @@ class RoomEditScreen extends Screen
      */
     public function name(): ?string
     {
-        return $this->room->exists ? 'Edit room' : 'Creating a new room';
+        return $this->room->exists ? __('room.edit_title') : __('room.create_title');
     }
 
     /**
@@ -48,7 +48,7 @@ class RoomEditScreen extends Screen
      */
     public function description(): ?string
     {
-        return 'Комнаты офиса';
+        return __('room.description');
     }
 
     /**
@@ -59,17 +59,17 @@ class RoomEditScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Create room')
+            Button::make(__('room.create_button'))
                 ->icon('pencil')
                 ->method('createOrUpdate')
                 ->canSee(!$this->room->exists),
 
-            Button::make('Update')
+            Button::make(__('room.update_button'))
                 ->icon('note')
                 ->method('createOrUpdate')
                 ->canSee($this->room->exists),
 
-            Button::make('Remove')
+            Button::make(__('room.remove_button'))
                 ->icon('trash')
                 ->method('remove')
                 ->canSee($this->room->exists),
@@ -86,27 +86,27 @@ class RoomEditScreen extends Screen
         return [
             Layout::rows([
                 Input::make('room.name')
-                    ->title('Name')
-                    ->placeholder('Room name')
-                    ->help('Название комнаты')
+                    ->title(__('room.name_label'))
+                    ->placeholder(__('room.name_placeholder'))
+                    ->help(__('room.name_help'))
                     ->required(),
 
                 Input::make('room.capacity')
-                    ->title('Capacity')
+                    ->title(__('room.capacity_label'))
                     ->type('number')
-                    ->placeholder('Number of people')
-                    ->help('Вместимость комнаты')
+                    ->placeholder(__('room.capacity_placeholder'))
+                    ->help(__('room.capacity_help'))
                     ->required(),
 
                 Input::make('room.description')
-                    ->title('Description')
-                    ->placeholder('Room description')
-                    ->help('Описание комнаты'),
+                    ->title(__('room.description_label'))
+                    ->placeholder(__('room.description_placeholder'))
+                    ->help(__('room.description_help')),
 
                 Select::make('room.office_id')
-                    ->title('Office')
+                    ->title(__('room.office_label'))
                     ->fromModel(Office::class, 'name')
-                    ->help('Выберите офис для этой комнаты')
+                    ->help(__('room.office_help'))
                     ->required(),
 
             ])
@@ -122,7 +122,7 @@ class RoomEditScreen extends Screen
     {
         $this->room->fill($request->get('room'))->save();
 
-        Alert::info('You have successfully saved a room.');
+        Alert::info(__('room.saved_message'));
 
         return redirect()->route('platform.room.list');
     }
@@ -135,7 +135,7 @@ class RoomEditScreen extends Screen
     {
         $this->room->delete();
 
-        Alert::info('You have successfully deleted the room.');
+        Alert::info(__('room.deleted_message'));
 
         return redirect()->route('platform.room.list');
     }

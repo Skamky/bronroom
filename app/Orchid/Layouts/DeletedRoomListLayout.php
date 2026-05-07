@@ -19,20 +19,20 @@ class DeletedRoomListLayout extends RoomListLayout
     protected function columns(): iterable
     {
         return [...parent::columns(),
-            TD::make('deleted_at', 'Delete'),
-            TD::make('Действия')
+            TD::make('deleted_at', __('room.column_deleted_at')),
+            TD::make(__('room.column_actions'))
                 ->align(TD::ALIGN_CENTER)
                 ->render(function (Room $room) {
                     return Group::make([
-                        Button::make('Восстановить')
+                        Button::make(__('room.restore_button'))
                             ->icon('refresh')
                             ->method('restore', ['roomId' => $room->id])
-                            ->confirm('Восстановить эту комнату?'),
+                            ->confirm(__('room.restore_confirm')),
 
-                        Button::make('Стереть')
+                        Button::make(__('room.delete_button'))
                             ->icon('trash')
                             ->method('forceDelete', ['roomId' => $room->id])
-                            ->confirm('Окончательно удалить комнату? Это действие нельзя отменить.'),
+                            ->confirm(__('room.delete_confirm')),
                     ]);
                 }),
         ];

@@ -33,16 +33,16 @@ class RoomListLayout extends Table
                         ->route('platform.room.edit', $room);
                 }),
 
-            TD::make('name')
+            TD::make('name', __('room.column_name'))
                 ->render(function (Room $room) {
                     return Link::make($room->name)
                         ->route('platform.room.edit', $room);
                 }),
 
-            TD::make('capacity'),
-            TD::make('description'),
+            TD::make('capacity', __('room.column_capacity')),
+            TD::make('description', __('room.column_description')),
 
-            TD::make('office_id', 'Office')
+            TD::make('office_id', __('room.column_office'))
                 ->render(function (Room $room) {
                     if ($room->office) {
                         return Link::make($room->office->name)
@@ -50,9 +50,9 @@ class RoomListLayout extends Table
                     }
                     return '-';
                 }),
-            TD::make('created_at')->defaultHidden(),
-            TD::make('updated_at'),
-            TD::make('deleted_at')->defaultHidden()
+            TD::make('created_at', __('room.column_created_at'))->defaultHidden(),
+            TD::make('updated_at', __('room.column_updated_at')),
+            TD::make('deleted_at', __('room.column_deleted_at'))->defaultHidden()
 
         ];
     }

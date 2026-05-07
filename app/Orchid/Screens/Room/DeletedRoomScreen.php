@@ -32,12 +32,12 @@ class DeletedRoomScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'DeletedRoomScreen';
+        return __('room.deleted_title');
     }
 
     public function description(): ?string
     {
-        return 'Список удаленных комнат';
+        return __('room.deleted_description');
     }
 
     /**
@@ -48,7 +48,7 @@ class DeletedRoomScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Назад к списку комнат')
+            Link::make(__('room.back_to_list'))
                 ->icon('arrow-left')
                 ->route('platform.room.list'),
         ];
@@ -68,7 +68,7 @@ class DeletedRoomScreen extends Screen
     {
         $room = Room::onlyTrashed()->findOrFail($roomId);
         $room->restore();
-        Alert::info('Комната восстановлена');
+        Alert::info(__('room.restored_message'));
     }
 
     public function forceDelete(int $roomId): void
@@ -79,7 +79,7 @@ class DeletedRoomScreen extends Screen
 
         if ($events->isEmpty()) {
             $room->forceDelete();
-            Alert::info('Комната окончательно удалена');
+            Alert::info(__('room.permanently_deleted_message'));
         } else {
 
 

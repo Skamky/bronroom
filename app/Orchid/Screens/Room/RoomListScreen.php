@@ -28,7 +28,7 @@ class RoomListScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Room List';
+        return __('room.list_title');
     }
 
     /**
@@ -38,7 +38,7 @@ class RoomListScreen extends Screen
      */
     public function description(): ?string
     {
-        return 'All rooms list and management';
+        return __('room.list_description');
     }
 
     /**
@@ -49,10 +49,10 @@ class RoomListScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Create new')
+            Link::make(__('room.create_new'))
                 ->icon('pencil')
                 ->route('platform.room.edit'),
-            Link::make('Deleted rooms')->route('platform.room.deleted')
+            Link::make(__('room.deleted_rooms'))->route('platform.room.deleted')
 
         ];
     }
