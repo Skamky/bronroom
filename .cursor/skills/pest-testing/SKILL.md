@@ -41,7 +41,6 @@ Pest supports both `test()` and `it()` functions. Before writing new tests, chec
 directory to match the project's convention. Use `test()` if existing tests use `test()`, or `it()` if they use `it()`.
 
 <!-- Basic Pest Test Example -->
-
 ```php
 it('is true', function () {
     expect(true)->toBeTrue();
@@ -59,7 +58,6 @@ it('is true', function () {
 Use specific assertions (`assertSuccessful()`, `assertNotFound()`) instead of `assertStatus()`:
 
 <!-- Pest Response Assertion -->
-
 ```php
 it('returns all', function () {
     $this->postJson('/api/docs', [])->assertSuccessful();
@@ -81,7 +79,6 @@ Import mock function before use: `use function Pest\Laravel\mock;`
 Use datasets for repetitive tests (validation rules, etc.):
 
 <!-- Pest Dataset Example -->
-
 ```php
 it('has emails', function (string $email) {
     expect($email)->not->toBeEmpty();
@@ -115,7 +112,6 @@ Browser tests run in real browsers for full integration testing:
 - Take screenshots or pause tests for debugging.
 
 <!-- Pest Browser Test Example -->
-
 ```php
 it('may reset the password', function () {
     Notification::fake();
@@ -140,7 +136,6 @@ it('may reset the password', function () {
 Quickly validate multiple pages have no JavaScript errors:
 
 <!-- Pest Smoke Testing Example -->
-
 ```php
 $pages = visit(['/', '/about', '/contact']);
 
@@ -160,7 +155,6 @@ Split tests across parallel processes for faster CI runs.
 Pest 4 includes architecture testing (from Pest 3):
 
 <!-- Architecture Test Example -->
-
 ```php
 arch('controllers')
     ->expect('App\Http\Controllers')

@@ -21,7 +21,6 @@ React page components should be placed in the `resources/js/Pages` directory.
 ### Page Component Structure
 
 <!-- Basic React Page Component -->
-
 ```react
 export default function UsersIndex({ users }) {
     return (
@@ -42,7 +41,6 @@ export default function UsersIndex({ users }) {
 Use `<Link>` for client-side navigation instead of traditional `<a>` tags:
 
 <!-- Inertia React Navigation -->
-
 ```react
 import { Link, router } from '@inertiajs/react'
 
@@ -54,7 +52,6 @@ import { Link, router } from '@inertiajs/react'
 ### Link with Method
 
 <!-- Link with POST Method -->
-
 ```react
 import { Link } from '@inertiajs/react'
 
@@ -68,7 +65,6 @@ import { Link } from '@inertiajs/react'
 Prefetch pages to improve perceived performance:
 
 <!-- Prefetch on Hover -->
-
 ```react
 import { Link } from '@inertiajs/react'
 
@@ -80,7 +76,6 @@ import { Link } from '@inertiajs/react'
 ### Programmatic Navigation
 
 <!-- Router Visit -->
-
 ```react
 import { router } from '@inertiajs/react'
 
@@ -103,7 +98,6 @@ router.visit('/users', {
 For Inertia v2.0.x: Build forms using the `useForm` helper as the `<Form>` component is not available until v2.1.0+.
 
 <!-- useForm Hook Example -->
-
 ```react
 import { useForm } from '@inertiajs/react'
 
@@ -159,7 +153,6 @@ export default function CreateUser() {
 Use deferred props to load data after initial page render:
 
 <!-- Deferred Props with Empty State -->
-
 ```react
 export default function UsersIndex({ users }) {
     // users will be undefined initially, then populated
@@ -189,7 +182,6 @@ Use the `usePoll` hook to automatically refresh data at intervals. It handles cl
 when the tab is inactive.
 
 <!-- Basic Polling -->
-
 ```react
 import { usePoll } from '@inertiajs/react'
 
@@ -206,7 +198,6 @@ export default function Dashboard({ stats }) {
 ```
 
 <!-- Polling With Request Options and Manual Control -->
-
 ```react
 import { usePoll } from '@inertiajs/react'
 
@@ -243,7 +234,6 @@ export default function Dashboard({ stats }) {
 Load more data when user scrolls to a specific element:
 
 <!-- Infinite Scroll with WhenVisible -->
-
 ```react
 import { WhenVisible } from '@inertiajs/react'
 
