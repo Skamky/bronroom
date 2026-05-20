@@ -13,7 +13,7 @@ import {convertUTCToLocalTime} from "@/utils/time";
 import {BusinessHoursInterface} from "@/Components/Calendar/RoomCalendar";
 
 interface OfficeCalendarProps {
-    roomIds: []
+    roomIds?: string[]
     office_id?: number | string
 
 }
@@ -57,7 +57,7 @@ export default function OfficeCalendar({roomIds, office_id}: OfficeCalendarProps
 
                 events={function (fetchInfo, successCallback, failureCallback) {
                     // Формируем параметры запроса с использованием fetchInfo
-                    if (roomIds?.length < 1) {
+                    if (!roomIds || roomIds.length < 1) {
                         return successCallback([]);
                     }
 

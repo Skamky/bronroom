@@ -17,7 +17,7 @@ export default function Dashboard({offices, selectedOffice, data}: DashboardPage
     let {url} = usePage<DashboardPageProps>();
 
     const currentSelectedOfficeId = selectedOffice?.id ?? '';
-    const [selectedRoomIds, setSelectedRoomIds] = React.useState();
+    const [selectedRoomIds, setSelectedRoomIds] = React.useState<string[] | undefined>(undefined);
 
 
     const handleCityChange = (officeId: string[]) => {
@@ -44,14 +44,15 @@ export default function Dashboard({offices, selectedOffice, data}: DashboardPage
                     <Col>
                         <Card>
                             <Select
-                                options={offices.map(item => ({value: item.id, content: item.name}))}
-                                value={currentSelectedOfficeId ? [currentSelectedOfficeId] : []}
-                                onUpdate={handleCityChange}
+                                options={offices.map(item => ({value: String(item.id), content: item.name}))}
+                                value={currentSelectedOfficeId ? [String(currentSelectedOfficeId)] : []}
+                                onUpdate={(value) => handleCityChange(value as string[])}
                                 placeholder={'Выберите Офис'}
                             />
 
 
-                            <TableRooms officeId={Number(currentSelectedOfficeId)} onUpdate={setSelectedRoomIds}/>
+                            <TableRooms officeId={Number(currentSelectedOfficeId)}
+                                        onUpdate={(val) => setSelectedRoomIds(val as string[] | undefined)}/>
                         </Card>
                         <br/>
                     </Col>

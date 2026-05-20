@@ -80,18 +80,38 @@ export const determineRoomStatus = async (
             new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString()
         );
 
+        // Helper to convert DateInput to Date
+        const toDate = (value: unknown): Date | null => {
+            if (value === undefined || value === null) return null;
+            // DateInput can be string | number | Date | number[]
+            if (Array.isArray(value)) return null;
+            if (typeof value === 'object') return null;
+            if (typeof value === 'string' || typeof value === 'number') {
+                return new Date(value);
+            }
+            if (value instanceof Date) return value;
+            return null;
+        };
+
         // Находим ближайшее релевантное событие (текущее или будущее)
         const relevantEvent = events
-            .filter(e => new Date(e.end) > now) // Событие еще не закончилось
-            .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())[0];
+            .filter(e => {
+                const endDate = toDate(e.end);
+                return endDate !== null && endDate > now;
+            }) // Событие еще не закончилось
+            .sort((a, b) => {
+                const startA = toDate(a.start)?.getTime() ?? 0;
+                const startB = toDate(b.start)?.getTime() ?? 0;
+                return startA - startB;
+            })[0];
 
         if (!relevantEvent) {
             // Нет событий → FREE
             return RoomStatus.FREE;
         }
 
-        const eventStart = new Date(relevantEvent.start);
-        const eventEnd = new Date(relevantEvent.end);
+        const eventStart = toDate(relevantEvent.start) || now;
+        const eventEnd = toDate(relevantEvent.end) || now;
         const isCurrentUserEvent = relevantEvent.user_id === currentUserId;
 
         // Проверка текущих событий
