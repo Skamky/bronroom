@@ -22,10 +22,12 @@ release: build
 	./vendor/bin/sail artisan route:clear
 	@echo "🗜️ Создание архива..."
 	@VERSION=$$(git describe --tags --always --dirty); \
-	zip -r ../laravel-release-$$VERSION.zip . \
+	zip -r laravel-release-$$VERSION.zip . \
 	-x "*.git*" \
 	-x "node_modules/*" \
 	-x ".env" \
+	-x "public/storage/*" \
+	-x "public/hot" \
 	-x "storage/logs/*" \
 	-x "storage/framework/sessions/*" \
 	-x "storage/framework/cache/*" \
@@ -36,8 +38,13 @@ release: build
 	-x "vendor/*" \
 	-x ".DS_Store" \
 	-x "code-generator/*" \
-	-x "uml/*"
-	@echo "✅ Архив создан: ../laravel-release-$$VERSION.zip"
+	-x "uml/*" \
+	-x ".idea/*" \
+	-x ".vscode/*" \
+	-x ".cursor/*" \
+	-x "temp/*" \
+	-x ".php-cs-fixer.cache"
+	@echo "✅ Архив создан: laravel-release-$$VERSION.zip"
 	@echo "⚠️  На сервере выполните: composer install --no-dev --optimize-autoloader && php artisan migrate --force"
 
 .PHONY: dev

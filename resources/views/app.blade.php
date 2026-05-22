@@ -22,10 +22,12 @@
         />
 
 
-        <!-- Scripts -->
+        <!-- Scripts 2-->
+        <!-- Генерирует маршруты Laravel для использования в Inertia.js навигации -->
         @routes
-        @viteReactRefresh
+        <!-- Подключает Vite-собранные JS и CSS ассеты: базовый файл + компонент текущей страницы -->
         @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
+        <!-- Рендерит дополнительный head-контент, добавленный Inertia (meta-теги и т.д.) -->
         @inertiaHead
     </head>
     <div class="preloader load-only">
