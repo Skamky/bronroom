@@ -7,18 +7,22 @@ use App\Http\Requests\UpdateRoomRequest;
 use App\Models\Office;
 use App\Models\Room;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class RoomController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
      * @param Office $office $
      * @return JsonResponse
      */
     public function index(Office $office)
     {
         $rooms = $office->rooms;
+
         return response()->json($rooms);
     }
 
@@ -41,12 +45,18 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Office $office, Room $room)
+    public function show(Office $office, Room $room): RedirectResponse|JsonResponse|Response
     {
-//        dd($office_id, $room);
-//        $room = Room::query()->findOrFail($room);
-        return Inertia::render('Room', ['room' => $room]);
+        if ($room->office_id !== $office->id) {
+            // Check if this is an API request (from apiResource route)
+            if (request()->expectsJson()) {
+                return response()->json(['message' => 'Room does not belong to this office.'], 404);
+            }
 
+            return redirect()->route('offices.rooms.show', [$room->office_id, $room->id]);
+        }
+
+        return Inertia::render('Room', ['room' => $room]);
     }
 
     /**
@@ -54,7 +64,6 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
-
     }
 
     /**

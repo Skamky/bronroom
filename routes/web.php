@@ -17,6 +17,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Inertia страницы с полной иерархией для навигации
     Route::prefix('offices/{office}')->group(function () {
         Route::apiResource('rooms', RoomController::class);
+        Route::get('rooms/{room}', [RoomController::class, 'show'])->name('offices.rooms.show');
         Route::prefix('rooms/{room}')->group(function () {
             Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('event.edit');
         });
