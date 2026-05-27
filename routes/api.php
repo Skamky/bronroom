@@ -10,10 +10,6 @@ Route::prefix('/v1')->group(function () {
         return $request->user();
     })->middleware('auth:sanctum');
 
-    Route::get('hi', function () {
-        return 'hi';
-    });
-
     Route::get('/offices/{office}/businessHours', [OfficeController::class, 'businessHours'])->middleware(CacheJsonResponse::class);
 
 });

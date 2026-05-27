@@ -6,26 +6,12 @@ use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
 use App\Http\Middleware\CacheJsonResponse;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/welcome_laravel', function () {
-    return Inertia::render('Welcome_default', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-
-Route::get('/phpinfo', function () {return phpinfo();});
+// Route::get('/phpinfo', function () {return phpinfo();});
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-
     Route::redirect('/', 'offices');
 
     // Inertia страницы с полной иерархией для навигации
