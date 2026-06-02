@@ -26,7 +26,7 @@ export default function Login({
 
     return (
         <GuestLayout>
-            <Head title="Log in"/>
+            <Head title="Войти"/>
 
             {status && (
                 <div className="">
@@ -36,7 +36,7 @@ export default function Login({
             <Card className='p-2'>
                 <form onSubmit={submit}>
                     <div>
-                        <Label>Email</Label>
+                        <Label>Адрес электронной почты</Label>
 
                         <TextInput
                             autoFocus={true}
@@ -53,7 +53,7 @@ export default function Login({
                     </div>
 
                     <div className="mt-4">
-                        <Label>Password</Label>
+                        <Label>Пароль</Label>
 
                         <TextInput
                             size={'l'}
@@ -81,7 +81,7 @@ export default function Login({
                                       }
                             />
                             <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
-                            Remember me
+                            Запомнить меня
                         </span>
                         </label>
                     </div>
@@ -91,7 +91,7 @@ export default function Login({
                             <Link
                                 href={route('password.request')}
                             >
-                                Forgot your password?
+                                Забыли пароль?
                             </Link>
                         )}
 
@@ -102,7 +102,7 @@ export default function Login({
                             size="l"
                             loading={processing}
                         >
-                            Log in
+                            Войти
                         </Button>
                     </div>
                 </form>

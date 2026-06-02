@@ -21,11 +21,11 @@ export default function Register() {
 
     return (
         <GuestLayout>
-            <Head title="Register" />
+            <Head title="Регистрация"/>
             <Card className='p-2'>
                 <form onSubmit={submit}>
                     <div>
-                        <Label>Name</Label>
+                        <Label>Имя</Label>
 
                         <TextInput
                             size="l"
@@ -41,7 +41,7 @@ export default function Register() {
                     </div>
 
                     <div className="mt-4">
-                        <Label>Email</Label>
+                        <Label>Адрес электронной почты</Label>
 
                         <TextInput
                             size="l"
@@ -57,7 +57,7 @@ export default function Register() {
                     </div>
 
                     <div className="mt-4">
-                        <Label>Password</Label>
+                        <Label>Пароль</Label>
 
                         <TextInput
                             size="l"
@@ -73,7 +73,7 @@ export default function Register() {
                     </div>
 
                     <div className="mt-4">
-                        <Label>Confirm Password</Label>
+                        <Label>Подтвердить пароль</Label>
 
                         <TextInput
                             size="l"
@@ -95,7 +95,7 @@ export default function Register() {
                             href={route('login')}
                             className="text-sm text-gray-600 underline hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                         >
-                            Already registered?
+                            Уже зарегистрированы?
                         </Link>
 
                         <Button
@@ -105,7 +105,7 @@ export default function Register() {
                             size="l"
                             loading={processing}
                         >
-                            Register
+                            Регистрация
                         </Button>
                     </div>
                 </form>
