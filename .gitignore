@@ -1,4 +1,8 @@
-/.phpunit.cache
+# macOS system files
+.DS_Store
+**/.DS_Store
+
+.phpunit.cache
 /node_modules
 /public/build
 /public/hot
