@@ -18,6 +18,7 @@ expert with them all. Ensure you abide by these specific packages & versions.
 - laravel/sanctum (SANCTUM) - v4
 - laravel/scout (SCOUT) - v11
 - tightenco/ziggy (ZIGGY) - v2
+- larastan/larastan (LARASTAN) - v3
 - laravel/boost (BOOST) - v2
 - laravel/breeze (BREEZE) - v2
 - laravel/mcp (MCP) - v0
