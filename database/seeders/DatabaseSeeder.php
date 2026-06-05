@@ -17,12 +17,10 @@ class DatabaseSeeder extends Seeder
     {
         User::factory(10)->create();
         $this->call([
-           RoleSeeder::class,
             OfficeSeeder::class,
             RoomSeeder::class,
-            EventSeeder::class
+            EventSeeder::class,
         ]);
-
 
         User::factory()->create([
             'name' => 'Test User',

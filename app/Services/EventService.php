@@ -13,6 +13,7 @@ class EventService
     public function checkEventOverlap(Room $room, string $startDate, string $endDate, ?int $excludeEventId = null): bool
     {
         $query = Raspisanie::where('room_id', $room->id)
+            ->whereColumn('start_date', '<', 'end_date')
             ->where(function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('start_date', [$startDate, $endDate])
                     ->orWhereBetween('end_date', [$startDate, $endDate])
@@ -32,7 +33,7 @@ class EventService
     public function createEvent(array $data, int $userId): Event
     {
         // Убрана внутренняя транзакция — теперь управляется контроллером
-        $event = new Event();
+        $event = new Event;
         $event->name = $data['title'];
         $event->description = $data['description'];
         $event->user_id = $userId;
@@ -42,12 +43,11 @@ class EventService
             'start_date' => $data['start_date'],
             'end_date' => $data['end_date'],
             'room_id' => $data['room_id'],
-            'event_id' => $event->id
+            'event_id' => $event->id,
         ]);
 
         return $event;
     }
-
 
     public function updateEvent(Event $event, array $data): Event
     {
@@ -68,6 +68,7 @@ class EventService
             $rasp->save();
 
             DB::commit();
+
             return $event;
         } catch (\Exception $e) {
             DB::rollBack();

@@ -6,7 +6,7 @@ use App\Models\Event;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<Event>
+ * @extends Factory<Event>
  */
 class EventFactory extends Factory
 {
@@ -17,13 +17,11 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
-
         $title = $this->faker->words($this->faker->numberBetween(1, 3), true);
+
         return [
             'name' => "[{$this->faker->countryISOAlpha3()}] {$title}",
             'description' => $this->faker->text(),
         ];
     }
-
-
 }
