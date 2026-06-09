@@ -33,7 +33,7 @@ export default function TableRooms({officeId, rooms, onUpdate}: TableRoomsProps)
     const noData = officeId === 0 || data.length === 0 ? 'No data' : '';
 
     const getOccupancyLevel = (rate: number) => {
-        if (rate <= 15) return {icon: '🟢', label: 'Низкая'};
+        if (rate <= 20) return {icon: '🟢', label: 'Низкая'};
         if (rate <= 50) return {icon: '🟡', label: 'Средняя'};
         if (rate <= 70) return {icon: '🟠', label: 'Высокая'};
         return {icon: '🔴', label: 'Очень высокая'};

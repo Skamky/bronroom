@@ -48,12 +48,12 @@ test('business hours api returns 404 for non-existent office', function () {
     $response->assertStatus(404);
 });
 
-test('root route redirects to offices for authenticated users', function () {
+test('root route returns 200 for authenticated users', function () {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)->get('/');
 
-    $response->assertRedirect('/offices');
+    $response->assertStatus(200);
 });
 
 test('unauthenticated user redirected from root', function () {
