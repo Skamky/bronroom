@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Services\EventService;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class EventSeeder extends Seeder
 {
@@ -28,6 +30,14 @@ class EventSeeder extends Seeder
         $rooms = Room::with('office')->get();
         $users = User::all();
 
+        $output = new ConsoleOutput();
+        $progressBar = new ProgressBar($output);
+        $progressBar->setFormat('very_verbose');
+
+        $progressBar->start();
+
+        $totalCreated = 0;
+
         foreach ($users as $user) {
             foreach ($rooms as $room) {
                 $office = $room->office;
@@ -35,9 +45,16 @@ class EventSeeder extends Seeder
                     continue;
                 }
 
-                $this->generateEventsForRoom($user, $room, $office, $currentDate, $endDate);
+                $created = $this->generateEventsForRoom($user, $room, $office, $currentDate, $endDate);
+                $progressBar->advance($created);
+                $totalCreated += $created;
             }
         }
+
+        $progressBar->setMessage('Готово');
+        $progressBar->finish();
+        $output->writeln('');
+        $output->writeln("<info>Всего создано событий: {$totalCreated}</info>");
     }
 
     /**
@@ -49,11 +66,11 @@ class EventSeeder extends Seeder
                $office,
         Carbon $currentDate,
         Carbon $endDate
-    ): void
+    ): int
     {
-        $maxAttempts = 50;
-
-        for ($i = 0; $i < 10; $i++) {
+        $maxAttempts = 150;
+        $createdCount = 0;
+        for ($i = 0; $i < 20; $i++) {
             $created = false;
             $attempt = 0;
 
@@ -112,7 +129,9 @@ class EventSeeder extends Seeder
                     ->create();
 
                 $created = true;
+                $createdCount++;
             }
         }
+        return $createdCount;
     }
 }

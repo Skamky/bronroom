@@ -12,7 +12,7 @@ use Inertia\Inertia;
 // Route::get('/phpinfo', function () {return phpinfo();});
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::redirect('/', 'offices');
+    Route::get('/', [OfficeController::class, 'index'])->name('home');
 
     // Inertia страницы с полной иерархией для навигации
     Route::prefix('offices/{office}')->group(function () {

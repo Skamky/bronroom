@@ -7,6 +7,15 @@ export interface User {
     email_verified_at?: string;
 }
 
+export interface OfficeData {
+    id: string | number;
+    name: string;
+    timezone: string;
+    location: string | null;
+    description: string | null;
+    rooms_count?: number;
+}
+
 export type BreadcrumbItem = {
     url?: string;
     text: string;
@@ -25,13 +34,19 @@ export type PageProps<
 export interface DashboardPageProps extends PageProps{
     url: string;
     href: (path?: string) => string;
-    offices: { id: string; name: string; timezone:string; location: string|null; description: string|null }[];
-    selectedOffice: {
-        id: string | number;
-        name: string;
-        timezone: string;
-        location: string | null;
-        description: string | null
-    };
+    offices: OfficeData[];
+    selectedOffice: OfficeData | null;
     data: { data: string };
+    rooms: RoomData[];
+}
+
+export interface RoomData {
+    id: number;
+    name: string;
+    capacity: number;
+    description?: string | null;
+    office_id: number;
+    booked_events: number;
+    workload: number;
+    status: string;
 }

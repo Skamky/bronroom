@@ -1,10 +1,11 @@
 import {Table, TableColumnConfig, Tooltip, withTableSelection, withTableSorting} from '@gravity-ui/uikit';
-import React, {ReactElement, useEffect, useState} from 'react';
+import React, {ReactElement, useState} from 'react';
 import {router} from "@inertiajs/react";
 import {AsyncStatusLabel} from "@/Components/Room/StatusLabel";
 
 interface TableRoomsProps {
     officeId: number | bigint,
+    rooms?: RoomType[],
     onUpdate?: (roomsId: (string[] | number[])) => void
 }
 
@@ -12,27 +13,29 @@ export interface RoomType {
     id: number;
     name?: string;
     capacity?: number;
-    description?: string;
+    description?: string | null;
     office_id?: number;
     created_at?: string;
     updated_at?: string;
     status: string;
-    workload: number
+    workload: number;
+    booked_events?: number;
 }
 
 
-
-export default function TableRooms({officeId, onUpdate}: TableRoomsProps): ReactElement {
+export default function TableRooms({officeId, rooms, onUpdate}: TableRoomsProps): ReactElement {
     const MyTable = withTableSorting(withTableSelection<RoomType>(Table));
 
-    const [data, setData] = useState([]);
-    const [noData, setNoData] = useState('No data');
     const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
 
+    // Данные берутся из props (переданы через Inertia)
+    const data = rooms ?? [];
+    const noData = officeId === 0 || data.length === 0 ? 'No data' : '';
+
     const getOccupancyLevel = (rate: number) => {
-        if (rate <= 30) return {icon: '🟢', label: 'Низкая'};
-        if (rate <= 70) return {icon: '🟡', label: 'Средняя'};
-        if (rate <= 90) return {icon: '🟠', label: 'Высокая'};
+        if (rate <= 15) return {icon: '🟢', label: 'Низкая'};
+        if (rate <= 50) return {icon: '🟡', label: 'Средняя'};
+        if (rate <= 70) return {icon: '🟠', label: 'Высокая'};
         return {icon: '🔴', label: 'Очень высокая'};
     };
 
@@ -54,7 +57,7 @@ export default function TableRooms({officeId, onUpdate}: TableRoomsProps): React
             align: 'center',
             meta: {sort: true},
             template: (item) => {
-                const workload = item.workload; // исходное значение workload
+                const workload = item.workload ?? 0;
                 const occupancy = getOccupancyLevel(workload);
 
                 return (
@@ -67,38 +70,6 @@ export default function TableRooms({officeId, onUpdate}: TableRoomsProps): React
     ];
 
     const getRowId = 'id';
-
-    useEffect(() => {
-        if (officeId == 0) {
-            return
-        }
-        setNoData('Loading...');
-        setData([]);
-
-        fetch(`/offices/${officeId}/rooms`, {
-            headers: {
-                'Accept': 'application/json'
-            }
-        }).then(response => {
-            if (!(response.ok || response.status == 404)) {
-                console.warn(response);
-                throw new Error(`Network response was not ok \n status:${response.status} \n statusText: ${response.statusText}`);
-            }
-            return response.json();
-        })
-            .then(result => {
-                if ('message' in result) {
-                    setData([]);
-                    setNoData('No data');
-                    return;
-                }
-                setData(result);
-            })
-            .catch(err => {
-                setData([]);
-                setNoData(err.message);
-            });
-    }, [officeId]);
 
     function changeSelectedIds(ids: string[]) {
         setSelectedIds(ids);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreOfficeRequest;
 use App\Http\Requests\UpdateOfficeRequest;
 use App\Models\Office;
+use Illuminate\Http\JsonResponse;
 use Inertia\Inertia;
 
 class OfficeController extends Controller
@@ -16,8 +17,9 @@ class OfficeController extends Controller
      */
     public function index()
     {
-        $offices = Office::all();
-        return Inertia::render('Index', ['offices' => $offices]);
+        $offices = Office::withCount('rooms')->get();
+
+        return Inertia::render('Home', ['offices' => $offices]);
     }
 
     /**
@@ -47,17 +49,33 @@ class OfficeController extends Controller
      */
     public function show(Office $office)
     {
-        $offices = Office::all();
+        $offices = Office::withCount('rooms')->get();
 
-        return Inertia::render('Index', ['offices' => $offices, 'selectedOffice' => $office]);
+        // Загружаем комнаты с подсчётом загруженности для передачи в Index
+        // Используем load() чтобы сохранить доступ к методам getWorkload() и getStatus()
+        $office->load(['rooms' => function ($q) {
+            $q->withCount([
+                'events as booked_events' => function ($q2) {
+                    $q2->where('start_date', '<=', now())
+                        ->where('end_date', '>=', now());
+                },
+            ])->orderBy('name');
+        }]);
+
+        // Преобразуем в array для Inertia (использует toArray() где есть workload и status)
+        return Inertia::render('Index', [
+            'offices' => $offices,
+            'selectedOffice' => $office,
+            'rooms' => $office->rooms,
+        ]);
     }
 
-    public function businessHours(Office $office): \Illuminate\Http\JsonResponse
+    public function businessHours(Office $office): JsonResponse
     {
         return response()->json([
             'daysOfWeek' => [1, 2, 3, 4, 5],
             'startTime' => $office->start_time->format('H:i'),
-            'endTime' => $office->end_time->format('H:i')
+            'endTime' => $office->end_time->format('H:i'),
         ]);
     }
 

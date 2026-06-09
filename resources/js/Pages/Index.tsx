@@ -10,7 +10,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-export default function Dashboard({offices, selectedOffice, data}: DashboardPageProps) {
+export default function Dashboard({offices, selectedOffice, data, rooms}: DashboardPageProps) {
     //  const evtSource = new EventSource('/stream')
 //TODO натолкнуть пользователя на выбор оффиса / сделать выбор оффиса автоматом
 
@@ -50,8 +50,7 @@ export default function Dashboard({offices, selectedOffice, data}: DashboardPage
                                 placeholder={'Выберите Офис'}
                             />
 
-
-                            <TableRooms officeId={Number(currentSelectedOfficeId)}
+                            <TableRooms officeId={Number(currentSelectedOfficeId)} rooms={rooms}
                                         onUpdate={(val) => setSelectedRoomIds(val as string[] | undefined)}/>
                         </Card>
                         <br/>
