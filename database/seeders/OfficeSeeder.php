@@ -20,25 +20,27 @@ class OfficeSeeder extends Seeder
         $offices = new Collection([
             [
                 'name' => 'Офис Уфы',
+                'description' => 'Главный офис в Уфе. Рабочие пространства, переговорные комнаты и зоны для совместной работы.',
                 'timezone' => 'Asia/Yekaterinburg',
                 'start_time' => Carbon::createFromTime(10, 0, 0, 'Asia/Yekaterinburg')->utc(),
                 'end_time' => Carbon::createFromTime(19, 0, 0, 'Asia/Yekaterinburg')->utc(),
             ],
             [
                 'name' => 'Офис Москвы',
+                'description' => 'Представительство в Москве. Клиентские зоны, переговорные комнаты и рабочие места.',
                 'timezone' => 'Europe/Moscow',
                 'start_time' => Carbon::createFromTime(9, 0, 0, 'Europe/Moscow')->utc(),
                 'end_time' => Carbon::createFromTime(18, 0, 0, 'Europe/Moscow')->utc(),
-            ]
+            ],
         ]);
 
         $timezones = collect(DateTimeZone::listIdentifiers(DateTimeZone::PER_COUNTRY, 'RU'));
-
 
         $offices->first(function ($office) use ($timezones) {
             if (!$timezones->contains($office['timezone'])) {
                 throw new Exception("Таймзона {$office['timezone']} не содержится в $timezones");
             }
+
             return false; // Продолжаем итерацию
         });
 
