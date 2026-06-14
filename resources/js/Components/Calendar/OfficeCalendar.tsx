@@ -81,6 +81,8 @@ export default function OfficeCalendar({roomIds, office_id}: OfficeCalendarProps
 
                 eventClick={handleEventClickWrapper}
                 businessHours={businessHours || undefined}
+                nowIndicator={true}
+
 
             />
 

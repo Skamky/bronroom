@@ -1,5 +1,10 @@
 // utils/time.ts
-import moment from 'moment-timezone';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 /**
  * Конвертирует время из UTC в локальный часовой пояс.
@@ -8,7 +13,7 @@ import moment from 'moment-timezone';
  */
 export const convertUTCToLocalTime = (utcTime: string): string => {
     if (!utcTime) return utcTime;
-    return moment.utc(utcTime, 'HH:mm').local().format('HH:mm');
+    return dayjs.utc(utcTime, 'HH:mm').local().format('HH:mm');
 };
 
 

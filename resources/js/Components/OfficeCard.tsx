@@ -2,7 +2,6 @@ import {Button, Card, Icon, User} from '@gravity-ui/uikit';
 import {Globe, Persons, MapPin} from '@gravity-ui/icons';
 import {router} from '@inertiajs/react';
 import React from 'react';
-import {max} from "moment-timezone";
 
 export interface OfficeData {
     id: string | number;
