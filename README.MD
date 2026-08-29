@@ -6,8 +6,8 @@ Full-stack приложение (Laravel + React/Inertia.js) для управл
 > 💡 **Демо-стенд:** Ранее был доступен на `bronroom.ru`. В данный момент заморожен, но может быть развернут по запросу для демонстрации.
 
 ### 🛠 Технологический стек
-- **Backend:** PHP 8.x, Laravel, MySQL
-- **Frontend:** React, Inertia.js, Tailwind CSS (если используется)
+- **Backend:** PHP 8.x, Laravel 13, MySQL
+- **Frontend:** React, Inertia.js
 - **DevOps:** Docker, Laravel Sail, Make
 
 ---
